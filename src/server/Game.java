@@ -5,12 +5,19 @@ import java.net.Socket;
 import java.util.Scanner;
 
 import enums.Constants;
+import levels.ILevel;
+import levels.LevelFactory;
 
 import java.io.IOException;
 
 class Game {
     Player player1;
     Logger logger = Logger.getInstance();
+    ILevel currentLevel;
+    
+    public Game (String levelName) {
+    	currentLevel = LevelFactory.GetLevel(levelName);
+    }
 
     public void move(char direction, Player player) {
         logger.addMessage(String.valueOf(direction));
@@ -40,17 +47,11 @@ class Game {
         PrintWriter output;
         MessageFormer former;
 
-        public Player(Socket socket, char mark) {
-            former = new MessageFormer(Constants.ROWS_VALUE);
+        public Player(int x1, int y1, int x2, int y2, Socket socket, char mark) {
+        	super(x1, y1, x2, y2);
+            former = new MessageFormer(Constants.ROWS_VALUE, currentLevel.levelString());
             this.socket = socket;
             this.mark = mark;
-            if (mark == 'A') {
-                this.northWestCoord = new Coordinates(1, 1);
-                this.southEastCoord = new Coordinates(2, 2);
-            } else {
-                this.northWestCoord = new Coordinates(6, 6);
-                this.southEastCoord = new Coordinates(7, 7);
-            }
         }
 
         @Override
@@ -71,6 +72,10 @@ class Game {
             }
 
         }
+        
+        public String getName() {
+    		return this.mark == 'A' ? "P1" : "P2";
+    	}
 
         private void setup() throws IOException {
             input = new Scanner(socket.getInputStream());
@@ -84,8 +89,8 @@ class Game {
                 opponent = player1;
                 opponent.opponent = this;
                 former.newMessage();
-                former.AddObject(this.opponent, "P1");
-                former.AddObject(this, "P2");
+                former.AddObject(this.opponent);
+                former.AddObject(this);
                 output.println("POS " + former.message);
                 opponent.output.println("POS " + former.message);
             }
@@ -103,8 +108,8 @@ class Game {
             try {
                 move(direction, this);
                 former.newMessage();
-                former.AddObject(player1, "P1");
-                former.AddObject(player1.opponent, "P2");
+                former.AddObject(player1);
+                former.AddObject(player1.opponent);
                 output.println("POS " + former.message);
                 opponent.output.println("POS " + former.message);
             } catch (IllegalStateException e) {

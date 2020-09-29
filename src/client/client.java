@@ -1,16 +1,15 @@
 package client;
 
-import java.awt.Font;
-import java.awt.Color;
-import java.awt.GridLayout;
-import java.awt.GridBagLayout;
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.Arrays;
-import java.util.Scanner;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Scanner;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -107,14 +106,17 @@ public class client {
                 	for (int i = 0; i < map.length; i++)
                 	{
                 		switch (map[i]) {
-                		case '1':
-                			board[i].setBackground(Color.blue);
-                			break;
-                		case '2':
-                			board[i].setBackground(Color.red);
-                			break;
-                		default:
-                			board[i].setBackground(Color.white);
+	                		case '1':
+	                			board[i].setBackground(Color.blue);
+	                			break;
+	                		case '2':
+	                			board[i].setBackground(Color.red);
+	                			break;
+	                		case 'w':
+	                			board[i].setBackground(Color.black);
+	                			break;
+	                		default:
+	                			board[i].setBackground(Color.white);
                 		}
                 	}
                 	

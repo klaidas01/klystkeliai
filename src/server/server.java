@@ -9,9 +9,9 @@ public class server {
             System.out.println("Game Server is Running...");
             var pool = Executors.newFixedThreadPool(200);
             while (true) {
-                Game game = new Game();
-                pool.execute(game.new Player(listener.accept(), 'A'));
-                pool.execute(game.new Player(listener.accept(), 'B'));
+                Game game = new Game("Box");
+                pool.execute(game.new Player(1, 1, 2, 2, listener.accept(), 'A'));
+                pool.execute(game.new Player(40, 40, 41, 41, listener.accept(), 'B'));
             }
         }
     }
