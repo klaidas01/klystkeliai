@@ -1,4 +1,4 @@
-package game;
+package client;
 
 import java.awt.Font;
 import java.awt.Color;
@@ -7,8 +7,6 @@ import java.awt.GridBagLayout;
 import java.awt.BorderLayout;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.Arrays;
 import java.util.Scanner;
 import java.io.PrintWriter;
@@ -16,23 +14,19 @@ import java.net.Socket;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import enums.Constants;
+
 public class client {
-	private JFrame frame = new JFrame("Tic Tac Toe");
+	private JFrame frame = new JFrame("Klystkeliai");
     private JLabel messageLabel = new JLabel("...");
 
-    private Square[] board = new Square[64];
+    private Square[] board = new Square[Constants.ROWS_VALUE * Constants.ROWS_VALUE];
 
     private Socket socket;
     private Scanner in;
     private PrintWriter out;
-    
-    int PlayerX = 0;
-    int PlayerY = 0;
-    int OpponentX = 0;
-    int OpponentY = 0;
     
     public client(String serverAddress) throws Exception {
 
@@ -44,8 +38,8 @@ public class client {
         frame.getContentPane().add(messageLabel, BorderLayout.SOUTH);
 
         var boardPanel = new JPanel();
-        boardPanel.setBackground(Color.black);
-        boardPanel.setLayout(new GridLayout(8, 8, 2, 2));
+        boardPanel.setBackground(Color.white);
+        boardPanel.setLayout(new GridLayout(Constants.ROWS_VALUE, Constants.ROWS_VALUE, 0, 0));
         boardPanel.setFocusable(true);
         boardPanel.addKeyListener(new KeyListener() {
 
@@ -74,8 +68,6 @@ public class client {
 
 			@Override
 			public void keyReleased(KeyEvent e) {
-				// TODO Auto-generated method stub
-				
 			}
         	
         });
@@ -107,33 +99,28 @@ public class client {
         try {
             var response = in.nextLine();
             var mark = response.charAt(8);
-            var opponentMark = mark == 'A' ? 'B' : 'A';
             frame.setTitle("Player " + mark);
             while (in.hasNextLine()) {
                 response = in.nextLine();
                 if (response.startsWith("POS")) {
-                	var pos = response.substring(4);
-                	int[] coords = Arrays.stream(pos.split(";")).mapToInt(Integer::parseInt).toArray();
-                	
-                	if (!(PlayerX == OpponentX && PlayerY == OpponentY)) {
-                		board[8*OpponentY + OpponentX].setText(' ');
-                		board[8*PlayerY + PlayerX].setText(' ');
+                	var map = response.substring(4).toCharArray();
+                	System.out.println(map);
+                	for (int i = 0; i < map.length; i++)
+                	{
+                		switch (map[i]) {
+                		case '1':
+                			board[i].setBackground(Color.blue);
+                			break;
+                		case '2':
+                			board[i].setBackground(Color.red);
+                			break;
+                		default:
+                			board[i].setBackground(Color.white);
+                		}
                 	}
-                	board[8*coords[3] + coords[2]].setText(opponentMark);
                 	
-                	board[8*coords[1] + coords[0]].setText(mark);
-                	
-                	board[8*OpponentY + OpponentX].repaint();
-                	board[8*coords[3] + coords[2]].repaint();
-                	board[8*PlayerY + PlayerX].repaint();
-                	board[8*coords[1] + coords[0]].repaint();
-                	
-                	PlayerX = coords[0];
-                	PlayerY = coords[1];
-                	OpponentX = coords[2];
-                	OpponentY = coords[3];
                 }
-                System.out.println(response);
+                //System.out.println(response); //for debugging
             }
             out.println("QUIT");
         } catch (Exception e) {
@@ -152,7 +139,7 @@ public class client {
         }
         client client = new client(args[0]);
         client.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        client.frame.setSize(320, 320);
+        client.frame.setSize(1000, 1000);
         client.frame.setVisible(true);
         client.frame.setResizable(false);
         client.play();
