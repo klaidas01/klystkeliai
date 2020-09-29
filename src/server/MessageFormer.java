@@ -1,25 +1,31 @@
 package server;
 
 public class MessageFormer {
-	StringBuilder message;
+	public StringBuilder message;
 	int size;
+	StringBuilder level;
 	
 	public MessageFormer(int boardSize) {
-		message = new StringBuilder("o".repeat(boardSize * boardSize));
+		level = new StringBuilder("o".repeat(boardSize * boardSize));
+		message = new StringBuilder(level);
+		size = boardSize;
+	}
+	
+	public MessageFormer(int boardSize, StringBuilder loadedLevel) {
+		level = new StringBuilder(loadedLevel);
+		message = new StringBuilder(loadedLevel);
 		size = boardSize;
 	}
 	
 	public void newMessage() {
-		message = new StringBuilder("o".repeat(size * size));
+		message = new StringBuilder(level);
 	}
 	
-	public void AddObject(BoardObject obj, String objType) {
-		System.out.println("UP_LEFT: " + obj.northWestCoord.X + ";" + obj.northWestCoord.Y);
-		System.out.println("DOWN_RIGHT: " + obj.southEastCoord.X + ";" + obj.southEastCoord.Y);
+	public void AddObject(BoardObject obj) {
 		for (int i = obj.northWestCoord.Y; i <= obj.southEastCoord.Y; i++)
 	        for (int j = obj.northWestCoord.X; j <= obj.southEastCoord.X; j++)
 	            {
-	        		switch(objType) {
+	        		switch(obj.getName()) {
 	        			case "P1":
 	        				message.setCharAt(j + i * size, '1');
 	        				break;
