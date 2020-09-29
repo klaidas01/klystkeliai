@@ -104,7 +104,6 @@ public class client {
                 response = in.nextLine();
                 if (response.startsWith("POS")) {
                 	var map = response.substring(4).toCharArray();
-                	System.out.println(map);
                 	for (int i = 0; i < map.length; i++)
                 	{
                 		switch (map[i]) {
