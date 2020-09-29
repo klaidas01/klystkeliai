@@ -1,27 +1,12 @@
-package game;
+package server;
 
-import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
-import java.util.concurrent.Executors;
 
+import enums.Constants;
 
-
-public class server {
-	public static void main(String[] args) throws Exception {
-        try (var listener = new ServerSocket(58901)) {
-            System.out.println("Game Server is Running...");
-            var pool = Executors.newFixedThreadPool(200);
-            while (true) {
-                Game game = new Game();
-                pool.execute(game.new Player(listener.accept(), 'A'));
-                pool.execute(game.new Player(listener.accept(), 'B'));
-            }
-        }
-    }
-}
+import java.io.IOException;
 
 class Game {	
 	Player player1;
@@ -31,52 +16,41 @@ class Game {
         if (player.opponent == null) {
             throw new IllegalStateException("Can't move without an opponent");
         } else if (direction == 'U') {
-        	player.position.Up();
+        	player.northWestCoord.Up();
+        	player.southEastCoord.Up();
         } else if (direction == 'D') {
-        	player.position.Down();
+        	player.northWestCoord.Down();
+        	player.southEastCoord.Down();
         } else if (direction == 'R') {
-        	player.position.Right();
+        	player.northWestCoord.Right();
+        	player.southEastCoord.Right();
         } else if (direction == 'L') {
-        	player.position.Left();
+        	player.northWestCoord.Left();
+        	player.southEastCoord.Left();
         }
     }
-
 	
-	class Position {
-		int X;
-		int Y;
-		
-		public Position(int x, int y) {
-			this.X = x;
-			this.Y = y;
-		}
-		
-		public void Up() {
-			this.Y = this.Y - 1;
-		}
-		public void Down() {
-			this.Y = this.Y + 1;
-		}
-		public void Left() {
-			this.X = this.X - 1;
-		}
-		public void Right() {
-			this.X = this.X + 1;
-		}
-	}
-	
-	class Player implements Runnable {
+	class Player extends BoardObject implements Runnable {
 		char mark;
         Player opponent;
         Socket socket;
         Scanner input;
         PrintWriter output;
-        Position position;
+        MessageFormer former;
 
         public Player(Socket socket, char mark) {
+        	former = new MessageFormer(Constants.ROWS_VALUE);
             this.socket = socket;
             this.mark = mark;
-            this.position = new Position(0,0);
+            if (mark == 'A')
+            {
+            	this.northWestCoord = new Coordinates(1,1);
+                this.southEastCoord = new Coordinates(2,2);
+            }
+            else {
+            	this.northWestCoord = new Coordinates(6,6);
+                this.southEastCoord = new Coordinates(7,7);
+            }
         }
         
         @Override
@@ -109,8 +83,11 @@ class Game {
             } else {
                 opponent = player1;
                 opponent.opponent = this;
-                output.println("POS " + this.position.X + ';' + this.position.Y + ';' + this.opponent.position.X + ';' + this.opponent.position.Y);
-                opponent.output.println("POS " + this.opponent.position.X + ';' + this.opponent.position.Y + ';' + this.position.X + ';' + this.position.Y);
+                former.newMessage();
+                former.AddObject(this.opponent, "P1");
+                former.AddObject(this, "P2");
+                output.println("POS " + former.message);
+                opponent.output.println("POS " + former.message);
             }
         }
         
@@ -124,9 +101,12 @@ class Game {
         
         private void processMoveCommand(char direction) {
             try {
-                move(direction, this);
-                output.println("POS " + this.position.X + ';' + this.position.Y + ';' + this.opponent.position.X + ';' + this.opponent.position.Y);
-                opponent.output.println("POS " + this.opponent.position.X + ';' + this.opponent.position.Y + ';' + this.position.X + ';' + this.position.Y);
+            	move(direction, this);
+            	former.newMessage();
+                former.AddObject(player1, "P1");
+                former.AddObject(player1.opponent, "P2");
+                output.println("POS " + former.message);
+                opponent.output.println("POS " + former.message);
             } 
             catch (IllegalStateException e) {
                 output.println("MESSAGE " + e.getMessage());
@@ -135,5 +115,5 @@ class Game {
 
 
 	}
-	
 }
+	
