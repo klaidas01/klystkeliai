@@ -1,9 +1,9 @@
 package levels;
 
+import boardObjects.BoardObject;
+import boardObjects.NegativeObjectFactory;
 import enums.Constants;
-import server.BoardObject;
 import server.MessageFormer;
-import server.Wall;
 
 public class Box implements ILevel {
 	private StringBuilder levelString;
@@ -12,10 +12,10 @@ public class Box implements ILevel {
 	public Box()
 	{
 		walls = new BoardObject[] {
-				new Wall(0, 0, 49, 0),
-				new Wall(0, 0, 0, 49),
-				new Wall(49, 0, 49, 49),
-				new Wall(0, 49, 49, 49)
+				NegativeObjectFactory.GetNegativeObject(0, 0, 49, 0, "BLACK_WALL"),
+				NegativeObjectFactory.GetNegativeObject(0, 0, 0, 49, "BLACK_WALL"),
+				NegativeObjectFactory.GetNegativeObject(49, 0, 49, 49, "BLACK_WALL"),
+				NegativeObjectFactory.GetNegativeObject(0, 49, 49, 49, "BLACK_WALL")
 				};
 		MessageFormer former = new MessageFormer(Constants.ROWS_VALUE);
 		for (BoardObject wall : walls)

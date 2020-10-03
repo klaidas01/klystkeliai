@@ -1,6 +1,6 @@
 package server;
 
-class Coordinates {
+public class Coordinates {
 	int X;
 	int Y;
 	

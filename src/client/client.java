@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.PrintWriter;
@@ -14,6 +15,7 @@ import java.util.Scanner;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 import enums.Constants;
 
@@ -41,13 +43,16 @@ public class client {
         boardPanel.setLayout(new GridLayout(Constants.ROWS_VALUE, Constants.ROWS_VALUE, 0, 0));
         boardPanel.setFocusable(true);
         boardPanel.addKeyListener(new KeyListener() {
-
+        	
+        	Timer timer = new Timer(100, (ActionListener)this);
+        	
 			@Override
 			public void keyTyped(KeyEvent e) {
 			}
 
 			@Override
 			public void keyPressed(KeyEvent e) {
+				timer.start();
 				int keyCode = e.getKeyCode();
 			    switch( keyCode ) { 
 			        case KeyEvent.VK_UP:
