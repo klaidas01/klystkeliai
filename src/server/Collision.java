@@ -3,7 +3,7 @@ package server;
 import boardObjects.BoardObject;
 
 public class Collision {
-	public boolean doesCollideWithAny(BoardObject[] objects, BoardObject object)
+	public static boolean doesCollideWithAny(BoardObject[] objects, BoardObject object)
 	{
 		for (BoardObject o : objects)
 		{
@@ -12,7 +12,7 @@ public class Collision {
 		return false;
 	}
 	
-	public boolean doesCollide(BoardObject object, BoardObject object2)
+	public static boolean doesCollide(BoardObject object, BoardObject object2)
 	{
 		return !(object2.northWestCoord.X > object.southEastCoord.X 
 				|| object2.southEastCoord.X < object.northWestCoord.X

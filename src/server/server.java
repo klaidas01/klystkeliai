@@ -10,8 +10,8 @@ public class server {
             var pool = Executors.newFixedThreadPool(200);
             while (true) {
                 Game game = new Game("Box");
-                pool.execute(game.new Player(1, 1, 2, 2, listener.accept(), 'A'));
-                pool.execute(game.new Player(40, 40, 41, 41, listener.accept(), 'B'));
+                pool.execute(game.new Player(1, 1, 4, 4, listener.accept(), 'A'));
+                pool.execute(game.new Player(40, 40, 43, 43, listener.accept(), 'B'));
             }
         }
     }

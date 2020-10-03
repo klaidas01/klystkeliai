@@ -8,67 +8,26 @@ import boardObjects.BoardObject;
 import enums.Constants;
 import levels.ILevel;
 import levels.LevelFactory;
+import movementStrategy.MovementDoubleSpeed;
+import movementStrategy.MovementHalfSpeed;
+import movementStrategy.MovementNormalSpeed;
+import movementStrategy.Moving;
 
 import java.io.IOException;
 
-class Game {
+public class Game {
     Player player1;
     Logger logger = Logger.getInstance();
     ILevel currentLevel;
-    Collision collision;
+    Moving movement;
     
     public Game (String levelName) {
     	currentLevel = LevelFactory.GetLevel(levelName);
-    	collision = new Collision();
     }
 
-    public void move(char direction, Player player) {
-        logger.addMessage(String.valueOf(direction));
-
-        if (player.opponent == null) {
-            throw new IllegalStateException("Can't move without an opponent");
-        } else if (direction == 'U') {
-            player.northWestCoord.Up();
-            player.southEastCoord.Up();
-            if(collision.doesCollideWithAny(currentLevel.getWalls(), player) || collision.doesCollide(player, player.opponent))
-            {
-            	player.northWestCoord.Down();
-                player.southEastCoord.Down();
-                //Reduce player score
-            }
-        } else if (direction == 'D') {
-            player.northWestCoord.Down();
-            player.southEastCoord.Down();
-            if(collision.doesCollideWithAny(currentLevel.getWalls(), player) || collision.doesCollide(player, player.opponent))
-            {
-            	player.northWestCoord.Up();
-                player.southEastCoord.Up();
-                //Reduce player score
-            }
-        } else if (direction == 'R') {
-            player.northWestCoord.Right();
-            player.southEastCoord.Right();
-            if(collision.doesCollideWithAny(currentLevel.getWalls(), player) || collision.doesCollide(player, player.opponent))
-            {
-            	player.northWestCoord.Left();
-                player.southEastCoord.Left();
-                //Reduce player score
-            }
-        } else if (direction == 'L') {
-            player.northWestCoord.Left();
-            player.southEastCoord.Left();
-            if(collision.doesCollideWithAny(currentLevel.getWalls(), player) || collision.doesCollide(player, player.opponent))
-            {
-            	player.northWestCoord.Right();
-                player.southEastCoord.Right();
-                //Reduce player score
-            }
-        }
-    }
-
-    class Player extends BoardObject implements Runnable {
+    public class Player extends BoardObject implements Runnable {
         char mark;
-        Player opponent;
+        public Player opponent;
         Socket socket;
         Scanner input;
         PrintWriter output;
@@ -133,7 +92,10 @@ class Game {
 
         private void processMoveCommand(char direction) {
             try {
-                move(direction, this);
+            	movement = new Moving(new MovementNormalSpeed());
+            	//movement = new Moving(new MovementHalfSpeed());
+            	//movement = new Moving(new MovementDoubleSpeed());
+            	movement.move(currentLevel, this, direction);
                 former.newMessage();
                 former.AddObject(player1);
                 former.AddObject(player1.opponent);
