@@ -36,6 +36,7 @@ public class GameFrame extends JPanel implements KeyListener,ActionListener {
 		else if (right) out.println('R');
 		else if (up) out.println('U');
 		else if (down) out.println('D');
+		repaint();
 	}
 
 	@Override

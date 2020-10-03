@@ -1,8 +1,8 @@
 package server;
 
 public class Coordinates {
-	int X;
-	int Y;
+	public int X;
+	public int Y;
 	
 	public Coordinates(int x, int y) {
 		this.X = x;

@@ -64,6 +64,7 @@ public class client {
             var mark = response.charAt(8);
             frame.setTitle("Player " + mark);
             while (in.hasNextLine()) {
+            	frame.repaint();
                 response = in.nextLine();
                 if (response.startsWith("POS")) {
                 	var map = response.substring(4).toCharArray();

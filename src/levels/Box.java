@@ -12,10 +12,10 @@ public class Box implements ILevel {
 	public Box()
 	{
 		walls = new BoardObject[] {
-				NegativeObjectFactory.GetNegativeObject(0, 0, 49, 0, "BLACK_WALL"),
-				NegativeObjectFactory.GetNegativeObject(0, 0, 0, 49, "BLACK_WALL"),
-				NegativeObjectFactory.GetNegativeObject(49, 0, 49, 49, "BLACK_WALL"),
-				NegativeObjectFactory.GetNegativeObject(0, 49, 49, 49, "BLACK_WALL")
+				NegativeObjectFactory.GetNegativeObject(0, 0, 99, 0, "BLACK_WALL"),
+				NegativeObjectFactory.GetNegativeObject(0, 0, 0, 99, "BLACK_WALL"),
+				NegativeObjectFactory.GetNegativeObject(99, 0, 99, 99, "BLACK_WALL"),
+				NegativeObjectFactory.GetNegativeObject(0, 99, 99, 99, "BLACK_WALL")
 				};
 		MessageFormer former = new MessageFormer(Constants.ROWS_VALUE);
 		for (BoardObject wall : walls)
