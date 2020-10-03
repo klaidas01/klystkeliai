@@ -15,13 +15,11 @@ import java.util.Scanner;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.Timer;
 
 import enums.Constants;
 
 public class client {
 	private JFrame frame = new JFrame("Klystkeliai");
-    private JLabel messageLabel = new JLabel("...");
 
     private Square[] board = new Square[Constants.ROWS_VALUE * Constants.ROWS_VALUE];
 
@@ -35,48 +33,8 @@ public class client {
         in = new Scanner(socket.getInputStream());
         out = new PrintWriter(socket.getOutputStream(), true);
 
-        messageLabel.setBackground(Color.lightGray);
-        frame.getContentPane().add(messageLabel, BorderLayout.SOUTH);
-
-        var boardPanel = new JPanel();
-        boardPanel.setBackground(Color.white);
-        boardPanel.setLayout(new GridLayout(Constants.ROWS_VALUE, Constants.ROWS_VALUE, 0, 0));
-        boardPanel.setFocusable(true);
-        boardPanel.addKeyListener(new KeyListener() {
-        	
-        	Timer timer = new Timer(100, (ActionListener)this);
-        	
-			@Override
-			public void keyTyped(KeyEvent e) {
-			}
-
-			@Override
-			public void keyPressed(KeyEvent e) {
-				timer.start();
-				int keyCode = e.getKeyCode();
-			    switch( keyCode ) { 
-			        case KeyEvent.VK_UP:
-			            out.println('U');
-			            break;
-			        case KeyEvent.VK_DOWN:
-			        	out.println('D');
-			            break;
-			        case KeyEvent.VK_LEFT:
-			        	out.println('L');
-			            break;
-			        case KeyEvent.VK_RIGHT :
-			        	out.println('R');
-			            break;
-			     }
-			}
-
-			@Override
-			public void keyReleased(KeyEvent e) {
-			}
-        	
-        });
+        var boardPanel = new GameFrame(out);
         for (var i = 0; i < board.length; i++) {
-            final int j = i;
             board[i] = new Square();
             boardPanel.add(board[i]);
         }
@@ -84,7 +42,8 @@ public class client {
     }
     
     static class Square extends JPanel {
-        JLabel label = new JLabel();
+		private static final long serialVersionUID = 1L;
+		JLabel label = new JLabel();
 
         public Square() {
             setBackground(Color.white);
