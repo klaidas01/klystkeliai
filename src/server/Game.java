@@ -4,6 +4,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 
+import boardObjects.BoardObject;
 import enums.Constants;
 import levels.ILevel;
 import levels.LevelFactory;
@@ -14,9 +15,11 @@ class Game {
     Player player1;
     Logger logger = Logger.getInstance();
     ILevel currentLevel;
+    Collision collision;
     
     public Game (String levelName) {
     	currentLevel = LevelFactory.GetLevel(levelName);
+    	collision = new Collision();
     }
 
     public void move(char direction, Player player) {
@@ -27,15 +30,39 @@ class Game {
         } else if (direction == 'U') {
             player.northWestCoord.Up();
             player.southEastCoord.Up();
+            if(collision.doesCollideWithAny(currentLevel.getWalls(), player) || collision.doesCollide(player, player.opponent))
+            {
+            	player.northWestCoord.Down();
+                player.southEastCoord.Down();
+                //Reduce player score
+            }
         } else if (direction == 'D') {
             player.northWestCoord.Down();
             player.southEastCoord.Down();
+            if(collision.doesCollideWithAny(currentLevel.getWalls(), player) || collision.doesCollide(player, player.opponent))
+            {
+            	player.northWestCoord.Up();
+                player.southEastCoord.Up();
+                //Reduce player score
+            }
         } else if (direction == 'R') {
             player.northWestCoord.Right();
             player.southEastCoord.Right();
+            if(collision.doesCollideWithAny(currentLevel.getWalls(), player) || collision.doesCollide(player, player.opponent))
+            {
+            	player.northWestCoord.Left();
+                player.southEastCoord.Left();
+                //Reduce player score
+            }
         } else if (direction == 'L') {
             player.northWestCoord.Left();
             player.southEastCoord.Left();
+            if(collision.doesCollideWithAny(currentLevel.getWalls(), player) || collision.doesCollide(player, player.opponent))
+            {
+            	player.northWestCoord.Right();
+                player.southEastCoord.Right();
+                //Reduce player score
+            }
         }
     }
 

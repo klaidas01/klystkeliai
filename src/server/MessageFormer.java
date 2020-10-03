@@ -1,5 +1,7 @@
 package server;
 
+import boardObjects.BoardObject;
+
 public class MessageFormer {
 	public StringBuilder message;
 	int size;
@@ -32,7 +34,7 @@ public class MessageFormer {
 	        			case "P2":
 	        				message.setCharAt(j + i * size, '2');
 	        				break;
-	        			case "WALL":
+	        			case "BLACK_WALL":
 	        				message.setCharAt(j + i * size, 'w');
 	        				break;
 	        			default:

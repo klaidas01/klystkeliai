@@ -1,6 +1,6 @@
 package levels;
 
-import server.BoardObject;
+import boardObjects.BoardObject;
 
 public interface ILevel {
 	public StringBuilder levelString();

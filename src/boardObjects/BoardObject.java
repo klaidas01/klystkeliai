@@ -1,8 +1,10 @@
-package server;
+package boardObjects;
+
+import server.Coordinates;
 
 public abstract class BoardObject {
-	Coordinates northWestCoord;
-	Coordinates southEastCoord;
+	public Coordinates northWestCoord;
+	public Coordinates southEastCoord;
 	
 	public BoardObject(int x1, int y1, int x2, int y2)
 	{
