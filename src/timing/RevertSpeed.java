@@ -16,6 +16,8 @@ public class RevertSpeed extends TimerTask {
 	
 	@Override
 	public void run() {
+		player.speedCount -= 1;
+		if(player.speedCount == 0)
 		player.setMovementStrategy(new MovementNormalSpeed());
 	}
 
