@@ -74,7 +74,6 @@ public class client {
         }
 
         public void setText(char text) {
-            label.setForeground(text == 'A' ? Color.BLUE : Color.RED);
             label.setText(text + "");
         }
     }
@@ -110,6 +109,12 @@ public class client {
 	                			break;
 	                		case 'f':
 	                			board[i].setBackground(Color.green);
+	                			break;
+	                		case 'p':
+	                			board[i].setBackground(Color.orange);
+	                			break;
+	                		case 's':
+	                			board[i].setBackground(Color.cyan);
 	                			break;
 	                		default:
 	                			board[i].setBackground(Color.white);
