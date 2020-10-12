@@ -53,6 +53,7 @@ public class Game {
         MessageFormer former;
         public int Score;
         IMovementStrategy movementStrategy;
+        public int speedCount;
 
         public Player(int x1, int y1, int x2, int y2, Socket socket, char mark) {
         	super(x1, y1, x2, y2);
@@ -61,6 +62,7 @@ public class Game {
             this.mark = mark;
             this.Score = 0;
             this.movementStrategy = new MovementNormalSpeed();
+            this.speedCount = 0;
         }
         
         public void setMovementStrategy(IMovementStrategy strategy)
@@ -140,10 +142,12 @@ public class Game {
             		switch (collectedPowerUp.getName()) {
             			case "DOUBLE_SPEED":
             				this.setMovementStrategy(new MovementDoubleSpeed());
+            				this.speedCount += 1;
             				timer.schedule(new RevertSpeed(this), 5000);
             				break;
             			case "HALF_SPEED":
             				this.setMovementStrategy(new MovementHalfSpeed());
+            				this.speedCount += 1;
             				timer.schedule(new RevertSpeed(this), 5000);
             				break;
             			default:
