@@ -4,6 +4,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.Timer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,21 +17,24 @@ import movementStrategy.MovementDoubleSpeed;
 import movementStrategy.MovementHalfSpeed;
 import movementStrategy.MovementNormalSpeed;
 import movementStrategy.Moving;
+import timing.SpawnFood;
 
 import java.io.IOException;
 
 public class Game {
     Player player1;
     Logger logger = Logger.getInstance();
-    ILevel currentLevel;
+    public ILevel currentLevel;
     Moving movement;
-    Random rand;
-    List<Food> foodList;
+    public Random rand;
+    public List<Food> foodList;
+    Timer timer;
     
     public Game (String levelName) {
     	currentLevel = LevelFactory.GetLevel(levelName);
     	rand = new Random();
     	foodList = new ArrayList<Food>();
+    	timer = new Timer(true);
     }
 
     public class Player extends BoardObject implements Runnable {
@@ -38,7 +42,7 @@ public class Game {
         public Player opponent;
         Socket socket;
         Scanner input;
-        PrintWriter output;
+        public PrintWriter output;
         MessageFormer former;
         int Score;
 
@@ -89,6 +93,7 @@ public class Game {
                 former.AddObject(this);
                 output.println("POS " + former.message);
                 opponent.output.println("POS " + former.message);
+                timer.schedule(new SpawnFood(foodList, rand, currentLevel, this, former), 0, Constants.FOOD_DELAY);
             }
         }
 
@@ -106,18 +111,6 @@ public class Game {
             	//movement = new Moving(new MovementHalfSpeed());
             	//movement = new Moving(new MovementDoubleSpeed());
             	former.newMessage();
-            	if (foodList.size() < Constants.FOOD_COUNT && rand.nextInt(10) < 1)
-            	{
-            		int size = rand.nextInt(3);
-            		int x = rand.nextInt(Constants.ROWS_VALUE);
-            		int y = rand.nextInt(Constants.ROWS_VALUE);
-            		Food newFood = new Food(x, y, x + size, y + size, size + 1);
-            		if (!(Collision.doesCollideWithAny(currentLevel.getWalls(), newFood) 
-            				|| Collision.doesCollideWithAny(foodList.toArray(new Food[0]), newFood)))
-            		{
-            			foodList.add(newFood);
-            		}
-            	}
             	movement.move(currentLevel, this, direction);
             	Food collectedFood = (Food)Collision.findObject(foodList.toArray(new Food[0]), this);
             	if (collectedFood != null)
