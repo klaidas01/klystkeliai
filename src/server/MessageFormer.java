@@ -40,6 +40,18 @@ public class MessageFormer {
 	        			case "FOOD":
 	        				message.setCharAt(j + i * size, 'f');
 	        				break;
+	        			case "DOUBLE_SPEED":
+	        				message.setCharAt(j + i * size, 's');
+	        				break;
+	        			case "HALF_SPEED":
+	        				message.setCharAt(j + i * size, 's');
+	        				break;
+	        			case "DOUBLE_POINTS":
+	        				message.setCharAt(j + i * size, 'p');
+	        				break;
+	        			case "ZERO_POINTS":
+	        				message.setCharAt(j + i * size, 'p');
+	        				break;
 	        			default:
 	        				message.setCharAt(j + i * size, 'o');
 	        				break;

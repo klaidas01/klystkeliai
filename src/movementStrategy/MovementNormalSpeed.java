@@ -21,7 +21,9 @@ public class MovementNormalSpeed implements IMovementStrategy {
                 {
                 	player.northWestCoord.Y += 1;
                     player.southEastCoord.Y += 1;
-                	//Reduce player score
+                    player.Score = (player.Score > 0) ? player.Score - 1 : player.Score;
+                    player.output.println("SCORE " + player.Score + ';' + player.opponent.Score);
+            		player.opponent.output.println("SCORE " + player.opponent.Score + ';' + player.Score);
                 }
             }
         } else if (direction == 'D') {
@@ -35,7 +37,9 @@ public class MovementNormalSpeed implements IMovementStrategy {
                 {
                 	player.northWestCoord.Y -= 1;
                     player.southEastCoord.Y -= 1;
-                	//Reduce player score
+                    player.Score = (player.Score > 0) ? player.Score - 1 : player.Score;
+                    player.output.println("SCORE " + player.Score + ';' + player.opponent.Score);
+            		player.opponent.output.println("SCORE " + player.opponent.Score + ';' + player.Score);
                 }
             }
         } else if (direction == 'R') {
@@ -49,7 +53,9 @@ public class MovementNormalSpeed implements IMovementStrategy {
                 {
                 	player.northWestCoord.X -= 1;
                     player.southEastCoord.X -= 1;
-                	//Reduce player score
+                    player.Score = (player.Score > 0) ? player.Score - 1 : player.Score;
+                    player.output.println("SCORE " + player.Score + ';' + player.opponent.Score);
+            		player.opponent.output.println("SCORE " + player.opponent.Score + ';' + player.Score);
                 }
             }
         } else if (direction == 'L') {
@@ -63,7 +69,9 @@ public class MovementNormalSpeed implements IMovementStrategy {
                 {
                 	player.northWestCoord.X += 1;
                     player.southEastCoord.X += 1;
-                	//Reduce player score
+                    player.Score = (player.Score > 0) ? player.Score - 1 : player.Score;
+                    player.output.println("SCORE " + player.Score + ';' + player.opponent.Score);
+            		player.opponent.output.println("SCORE " + player.opponent.Score + ';' + player.Score);
                 }
             }
         }

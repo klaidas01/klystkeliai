@@ -6,47 +6,53 @@ import java.util.TimerTask;
 
 import boardObjects.BoardObject;
 import boardObjects.Food;
+import boardObjects.PowerUpAbstractFactory;
 import enums.Constants;
 import levels.ILevel;
 import server.Collision;
 import server.Game.Player;
 import server.MessageFormer;
 
-public class SpawnFood extends TimerTask {
+public class SpawnPowerup extends TimerTask {
 	
+	private List<BoardObject> powerupList;
 	private List<Food> foodList;
-	private List<BoardObject> powerUpList;
 	private Random rand;
 	private ILevel currentLevel;
 	private Player player;
 	private MessageFormer former;
+	private PowerUpAbstractFactory factory;
 	
-	public SpawnFood(List<Food> _food, List<BoardObject> _powerups, Random _rand, ILevel _level, Player _player, MessageFormer _former)
+	public SpawnPowerup(List<BoardObject> _powerups, List<Food> _foodList, Random _rand, ILevel _level, Player _player, MessageFormer _former, PowerUpAbstractFactory _factory)
 	{
-		foodList = _food;
-		powerUpList = _powerups;
+		powerupList = _powerups;
+		foodList = _foodList;
 		rand = _rand;
 		currentLevel = _level;
 		player = _player;
 		former = _former;
+		factory = _factory;
 	}
 	
 	@Override
 	public void run() {
-		if (foodList.size() < Constants.FOOD_COUNT)
+		if (powerupList.size() < Constants.POWERUP_COUNT)
     	{
-    		int size = rand.nextInt(3);
+    		int size = 1;
     		int x = rand.nextInt(Constants.ROWS_VALUE);
     		int y = rand.nextInt(Constants.ROWS_VALUE);
-    		Food newFood = new Food(x, y, x + size, y + size, size + 1);
-    		if (!(Collision.doesCollideWithAny(currentLevel.getWalls(), newFood)
-    				|| Collision.doesCollideWithAny(powerUpList.toArray(new BoardObject[0]), newFood)
-    				|| Collision.doesCollideWithAny(foodList.toArray(new Food[0]), newFood)))
+    		int random = rand.nextInt(2);
+    		BoardObject newPowerUp;
+    		if (random == 0) newPowerUp = factory.getNegativePowerUp(x, y, x, y);
+    		else newPowerUp = factory.getPositivePowerUp(x, y, x, y);
+    		if (!(Collision.doesCollideWithAny(currentLevel.getWalls(), newPowerUp) 
+    				|| Collision.doesCollideWithAny(powerupList.toArray(new BoardObject[0]), newPowerUp)
+    				|| Collision.doesCollideWithAny(foodList.toArray(new Food[0]), newPowerUp)))
     		{
-    			foodList.add(newFood);
+    			powerupList.add(newPowerUp);
     		}
     		former.newMessage();
-    		for (BoardObject o : powerUpList)
+    		for (BoardObject o : powerupList)
         	{
         		former.AddObject(o);
         	}

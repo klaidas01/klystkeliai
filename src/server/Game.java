@@ -10,14 +10,19 @@ import java.util.List;
 
 import boardObjects.BoardObject;
 import boardObjects.Food;
+import boardObjects.PointFactory;
+import boardObjects.SpeedFactory;
 import enums.Constants;
 import levels.ILevel;
 import levels.LevelFactory;
+import movementStrategy.IMovementStrategy;
 import movementStrategy.MovementDoubleSpeed;
 import movementStrategy.MovementHalfSpeed;
 import movementStrategy.MovementNormalSpeed;
 import movementStrategy.Moving;
+import timing.RevertSpeed;
 import timing.SpawnFood;
+import timing.SpawnPowerup;
 
 import java.io.IOException;
 
@@ -26,14 +31,16 @@ public class Game {
     Logger logger = Logger.getInstance();
     public ILevel currentLevel;
     Moving movement;
-    public Random rand;
-    public List<Food> foodList;
+    Random rand;
+    List<Food> foodList;
+    List<BoardObject> powerUpList;
     Timer timer;
     
     public Game (String levelName) {
     	currentLevel = LevelFactory.GetLevel(levelName);
     	rand = new Random();
     	foodList = new ArrayList<Food>();
+    	powerUpList = new ArrayList<BoardObject>();
     	timer = new Timer(true);
     }
 
@@ -44,7 +51,8 @@ public class Game {
         Scanner input;
         public PrintWriter output;
         MessageFormer former;
-        int Score;
+        public int Score;
+        IMovementStrategy movementStrategy;
 
         public Player(int x1, int y1, int x2, int y2, Socket socket, char mark) {
         	super(x1, y1, x2, y2);
@@ -52,6 +60,12 @@ public class Game {
             this.socket = socket;
             this.mark = mark;
             this.Score = 0;
+            this.movementStrategy = new MovementNormalSpeed();
+        }
+        
+        public void setMovementStrategy(IMovementStrategy strategy)
+        {
+        	this.movementStrategy = strategy;
         }
 
         @Override
@@ -93,7 +107,9 @@ public class Game {
                 former.AddObject(this);
                 output.println("POS " + former.message);
                 opponent.output.println("POS " + former.message);
-                timer.schedule(new SpawnFood(foodList, rand, currentLevel, this, former), 0, Constants.FOOD_DELAY);
+                timer.schedule(new SpawnFood(foodList, powerUpList, rand, currentLevel, this, former), 0, Constants.FOOD_DELAY);
+                timer.schedule(new SpawnPowerup(powerUpList, foodList, rand, currentLevel, this, former, new SpeedFactory()), 0, Constants.POWERUP_DELAY);
+                timer.schedule(new SpawnPowerup(powerUpList, foodList, rand, currentLevel, this, former, new PointFactory()), 0, Constants.POWERUP_DELAY);
             }
         }
 
@@ -107,12 +123,10 @@ public class Game {
 
         private void processMoveCommand(char direction) {
             try {
-            	movement = new Moving(new MovementNormalSpeed());
-            	//movement = new Moving(new MovementHalfSpeed());
-            	//movement = new Moving(new MovementDoubleSpeed());
             	former.newMessage();
-            	movement.move(currentLevel, this, direction);
+            	movementStrategy.move(currentLevel, this, direction);
             	Food collectedFood = (Food)Collision.findObject(foodList.toArray(new Food[0]), this);
+            	BoardObject collectedPowerUp = Collision.findObject(powerUpList.toArray(new BoardObject[0]), this);
             	if (collectedFood != null)
             	{
             		foodList.remove(collectedFood);
@@ -120,9 +134,29 @@ public class Game {
             		output.println("SCORE " + this.Score + ';' + this.opponent.Score);
             		opponent.output.println("SCORE " + this.opponent.Score + ';' + this.Score);
             	}
+            	if (collectedPowerUp != null)
+            	{
+            		powerUpList.remove(collectedPowerUp);
+            		switch (collectedPowerUp.getName()) {
+            			case "DOUBLE_SPEED":
+            				this.setMovementStrategy(new MovementDoubleSpeed());
+            				timer.schedule(new RevertSpeed(this), 5000);
+            				break;
+            			case "HALF_SPEED":
+            				this.setMovementStrategy(new MovementHalfSpeed());
+            				timer.schedule(new RevertSpeed(this), 5000);
+            				break;
+            			default:
+            				break;
+            		}
+            	}
             	for (Food f : foodList)
             	{
             		former.AddObject(f);
+            	}
+            	for (BoardObject o : powerUpList)
+            	{
+            		former.AddObject(o);
             	}
                 former.AddObject(player1);
                 former.AddObject(player1.opponent);
