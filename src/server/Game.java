@@ -2,9 +2,13 @@ package server;
 
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Random;
 import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.List;
 
 import boardObjects.BoardObject;
+import boardObjects.Food;
 import enums.Constants;
 import levels.ILevel;
 import levels.LevelFactory;
@@ -20,9 +24,13 @@ public class Game {
     Logger logger = Logger.getInstance();
     ILevel currentLevel;
     Moving movement;
+    Random rand;
+    List<Food> foodList;
     
     public Game (String levelName) {
     	currentLevel = LevelFactory.GetLevel(levelName);
+    	rand = new Random();
+    	foodList = new ArrayList<Food>();
     }
 
     public class Player extends BoardObject implements Runnable {
@@ -32,12 +40,14 @@ public class Game {
         Scanner input;
         PrintWriter output;
         MessageFormer former;
+        int Score;
 
         public Player(int x1, int y1, int x2, int y2, Socket socket, char mark) {
         	super(x1, y1, x2, y2);
             former = new MessageFormer(Constants.ROWS_VALUE, currentLevel.levelString());
             this.socket = socket;
             this.mark = mark;
+            this.Score = 0;
         }
 
         @Override
@@ -95,8 +105,32 @@ public class Game {
             	movement = new Moving(new MovementNormalSpeed());
             	//movement = new Moving(new MovementHalfSpeed());
             	//movement = new Moving(new MovementDoubleSpeed());
+            	former.newMessage();
+            	if (foodList.size() < Constants.FOOD_COUNT && rand.nextInt(10) < 1)
+            	{
+            		int size = rand.nextInt(3);
+            		int x = rand.nextInt(Constants.ROWS_VALUE);
+            		int y = rand.nextInt(Constants.ROWS_VALUE);
+            		Food newFood = new Food(x, y, x + size, y + size, size + 1);
+            		if (!(Collision.doesCollideWithAny(currentLevel.getWalls(), newFood) 
+            				|| Collision.doesCollideWithAny(foodList.toArray(new Food[0]), newFood)))
+            		{
+            			foodList.add(newFood);
+            		}
+            	}
             	movement.move(currentLevel, this, direction);
-                former.newMessage();
+            	Food collectedFood = (Food)Collision.findObject(foodList.toArray(new Food[0]), this);
+            	if (collectedFood != null)
+            	{
+            		foodList.remove(collectedFood);
+            		this.Score += collectedFood.Value;
+            		output.println("SCORE " + this.Score + ';' + this.opponent.Score);
+            		opponent.output.println("SCORE " + this.opponent.Score + ';' + this.Score);
+            	}
+            	for (Food f : foodList)
+            	{
+            		former.AddObject(f);
+            	}
                 former.AddObject(player1);
                 former.AddObject(player1.opponent);
                 output.println("POS " + former.message);

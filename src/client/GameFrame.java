@@ -1,6 +1,7 @@
 package client;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,6 +23,7 @@ public class GameFrame extends JPanel implements KeyListener,ActionListener {
 	public GameFrame(PrintWriter output)
 	{
 		out = output;
+		this.setPreferredSize(new Dimension(Constants.BOARD_SIZE, Constants.BOARD_SIZE));
 		this.addKeyListener(this);
         this.setBackground(Color.white);
         this.setLayout(new GridLayout(Constants.ROWS_VALUE, Constants.ROWS_VALUE, 0, 0));

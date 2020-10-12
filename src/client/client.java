@@ -12,16 +12,21 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import javax.swing.border.Border;
 
 import enums.Constants;
 
 public class client {
 	private JFrame frame = new JFrame("Klystkeliai");
-
+	
     private Square[] board = new Square[Constants.ROWS_VALUE * Constants.ROWS_VALUE];
+    private JLabel[] scoreboard = new JLabel[2];
 
     private Socket socket;
     private Scanner in;
@@ -38,7 +43,23 @@ public class client {
             board[i] = new Square();
             boardPanel.add(board[i]);
         }
-        frame.getContentPane().add(boardPanel, BorderLayout.CENTER);
+        
+        ScoreFrame scorePanel = new ScoreFrame();
+        
+        for (var i = 0; i < scoreboard.length; i++) {
+        	String text = ((i == 0) ? "Your score: 0" : "Opponents score: 0");
+        	scoreboard[i] = new JLabel(text, SwingConstants.CENTER);
+        	scoreboard[i].setLayout(new GridBagLayout());
+        	Border border = BorderFactory.createLineBorder(Color.BLACK, 5);
+        	scoreboard[i].setBorder(border);
+        	scorePanel.add(scoreboard[i]);
+        }
+        
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        mainPanel.add(boardPanel);
+        mainPanel.add(scorePanel);
+        frame.getContentPane().add(mainPanel, BorderLayout.CENTER);
     }
     
     static class Square extends JPanel {
@@ -66,6 +87,13 @@ public class client {
             while (in.hasNextLine()) {
             	frame.repaint();
                 response = in.nextLine();
+                if (response.startsWith("SCORE"))
+                {
+                	var scoreString = response.substring(6);
+                	String[] scoreStrings = scoreString.split(";", 0);
+                	scoreboard[0].setText("Your score: " + scoreStrings[0]);
+                	scoreboard[1].setText("Opponents score: " + scoreStrings[1]);
+                }
                 if (response.startsWith("POS")) {
                 	var map = response.substring(4).toCharArray();
                 	for (int i = 0; i < map.length; i++)
@@ -79,6 +107,9 @@ public class client {
 	                			break;
 	                		case 'w':
 	                			board[i].setBackground(Color.black);
+	                			break;
+	                		case 'f':
+	                			board[i].setBackground(Color.green);
 	                			break;
 	                		default:
 	                			board[i].setBackground(Color.white);
@@ -105,7 +136,7 @@ public class client {
         }
         client client = new client(args[0]);
         client.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        client.frame.setSize(1000, 1000);
+        client.frame.setSize(Constants.BOARD_SIZE, Constants.BOARD_SIZE + (int)(Constants.BOARD_SIZE * 0.05));
         client.frame.setVisible(true);
         client.frame.setResizable(false);
         client.play();

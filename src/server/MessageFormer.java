@@ -37,6 +37,9 @@ public class MessageFormer {
 	        			case "BLACK_WALL":
 	        				message.setCharAt(j + i * size, 'w');
 	        				break;
+	        			case "FOOD":
+	        				message.setCharAt(j + i * size, 'f');
+	        				break;
 	        			default:
 	        				message.setCharAt(j + i * size, 'o');
 	        				break;
