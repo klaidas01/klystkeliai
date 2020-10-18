@@ -14,6 +14,8 @@ import boardObjects.PointFactory;
 import boardObjects.SpeedFactory;
 import enums.Constants;
 import levels.ILevel;
+import looks.ILooks;
+import looks.BaseLooks;
 import levels.LevelBuilder;
 import movementStrategy.IMovementStrategy;
 import movementStrategy.MovementDoubleSpeed;
@@ -27,13 +29,14 @@ import timing.SpawnPowerup;
 import java.io.IOException;
 
 public class Game {
-    Player player1;
-    Logger logger = Logger.getInstance();
+    public Player player1;
+    public Logger logger = Logger.getInstance();
     public ILevel currentLevel;
-    Random rand;
-    List<Food> foodList;
-    List<BoardObject> powerUpList;
-    Timer timer;
+    public Random rand;
+    public List<Food> foodList;
+    public List<BoardObject> powerUpList;
+    public Timer timer;
+    MessageFormer former;
     
     public Game () {
 //    	currentLevel = LevelBuilder.createBoxLevel();
@@ -43,6 +46,7 @@ public class Game {
     	foodList = new ArrayList<Food>();
     	powerUpList = new ArrayList<BoardObject>();
     	timer = new Timer(true);
+    	former = new MessageFormer(Constants.ROWS_VALUE, currentLevel.levelString());
     }
 
     public class Player extends BoardObject implements Runnable {
@@ -51,16 +55,15 @@ public class Game {
         Socket socket;
         Scanner input;
         public PrintWriter output;
-        MessageFormer former;
         public int Score;
         IMovementStrategy movementStrategy;
         public int speedCount;
         public int scoreCount;
         public double scoreMultiplier;
+        public ILooks looks;
 
         public Player(int x1, int y1, int x2, int y2, Socket socket, char mark) {
         	super(x1, y1, x2, y2);
-            former = new MessageFormer(Constants.ROWS_VALUE, currentLevel.levelString());
             this.socket = socket;
             this.mark = mark;
             this.Score = 0;
@@ -68,6 +71,12 @@ public class Game {
             this.speedCount = 0;
             this.scoreCount = 0;
             this.scoreMultiplier = 1;
+            this.looks = new BaseLooks(former, this);
+        }
+        
+        public void setLooks(ILooks looks)
+        {
+        	this.looks = looks;
         }
         
         public void setMovementStrategy(IMovementStrategy strategy)
@@ -91,7 +100,6 @@ public class Game {
                 } catch (IOException e) {
                 }
             }
-
         }
         
         public String getName() {
@@ -109,9 +117,8 @@ public class Game {
             } else {
                 opponent = player1;
                 opponent.opponent = this;
-                former.newMessage();
-                former.AddObject(this.opponent);
-                former.AddObject(this);
+                this.opponent.looks.draw();
+                this.looks.draw();
                 output.println("POS " + former.message);
                 opponent.output.println("POS " + former.message);
                 timer.schedule(new SpawnFood(foodList, powerUpList, rand, currentLevel, this, former), 0, Constants.FOOD_DELAY);
@@ -177,16 +184,14 @@ public class Game {
             	{
             		former.AddObject(o);
             	}
-                former.AddObject(player1);
-                former.AddObject(player1.opponent);
+                this.looks.draw();
+                this.opponent.looks.draw();
                 output.println("POS " + former.message);
                 opponent.output.println("POS " + former.message);
             } catch (IllegalStateException e) {
                 output.println("MESSAGE " + e.getMessage());
             }
         }
-
-
     }
 }
 	

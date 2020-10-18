@@ -8,6 +8,7 @@ import boardObjects.BoardObject;
 import boardObjects.Food;
 import enums.Constants;
 import levels.ILevel;
+import looks.RedCenterDecorator;
 import server.Collision;
 import server.Game.Player;
 import server.MessageFormer;
@@ -30,7 +31,7 @@ public class SpawnFood extends TimerTask {
 		player = _player;
 		former = _former;
 	}
-	
+
 	@Override
 	public void run() {
 		if (foodList.size() < Constants.FOOD_COUNT)
@@ -54,8 +55,8 @@ public class SpawnFood extends TimerTask {
         	{
         		former.AddObject(f);
         	}
-            former.AddObject(player);
-            former.AddObject(player.opponent);
+    		player.looks.draw();
+    		player.opponent.looks.draw();
             player.output.println("POS " + former.message);
             player.opponent.output.println("POS " + former.message);
     	}

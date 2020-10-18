@@ -60,8 +60,8 @@ public class SpawnPowerup extends TimerTask {
         	{
         		former.AddObject(f);
         	}
-            former.AddObject(player);
-            former.AddObject(player.opponent);
+            player.looks.draw();
+            player.opponent.looks.draw();
             player.output.println("POS " + former.message);
             player.opponent.output.println("POS " + former.message);
     	}

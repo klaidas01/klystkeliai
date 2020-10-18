@@ -58,5 +58,19 @@ public class MessageFormer {
 	        		}
 	            }
 	}
+	
+	public void AddColor(Coordinates northWestCoord, Coordinates southEastCoord, char color)
+	{
+		for (int i = northWestCoord.Y; i <= southEastCoord.Y; i++)
+	        for (int j = northWestCoord.X; j <= southEastCoord.X; j++)
+	            {
+	        		message.setCharAt(j + i * size, color);
+	            }
+	}
+	
+	public void AddPixel(int x, int y, char color)
+	{
+		message.setCharAt(x + y * size, color);
+	}
 
 }
