@@ -99,10 +99,10 @@ public class client {
                 	{
                 		switch (map[i]) {
 	                		case '1':
-	                			board[i].setBackground(Color.blue);
+	                			board[i].setBackground(Color.lightGray);
 	                			break;
 	                		case '2':
-	                			board[i].setBackground(Color.red);
+	                			board[i].setBackground(Color.lightGray);
 	                			break;
 	                		case 'w':
 	                			board[i].setBackground(Color.black);
@@ -115,6 +115,12 @@ public class client {
 	                			break;
 	                		case 's':
 	                			board[i].setBackground(Color.cyan);
+	                			break;
+	                		case 'R':
+	                			board[i].setBackground(Color.red);
+	                			break;
+	                		case 'B':
+	                			board[i].setBackground(Color.blue);
 	                			break;
 	                		default:
 	                			board[i].setBackground(Color.white);
