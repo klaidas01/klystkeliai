@@ -36,8 +36,9 @@ public class Game {
     Timer timer;
     
     public Game () {
-    	currentLevel = LevelBuilder.createBoxLevel();
+//    	currentLevel = LevelBuilder.createBoxLevel();
 //    	currentLevel = LevelBuilder.createInvisibleBoxLevel();
+    	currentLevel = LevelBuilder.createBibleLevel();
     	rand = new Random();
     	foodList = new ArrayList<Food>();
     	powerUpList = new ArrayList<BoardObject>();
