@@ -19,7 +19,6 @@ import movementStrategy.IMovementStrategy;
 import movementStrategy.MovementDoubleSpeed;
 import movementStrategy.MovementHalfSpeed;
 import movementStrategy.MovementNormalSpeed;
-import movementStrategy.Moving;
 import timing.RevertScoreMultiplier;
 import timing.RevertSpeed;
 import timing.SpawnFood;
@@ -31,7 +30,6 @@ public class Game {
     Player player1;
     Logger logger = Logger.getInstance();
     public ILevel currentLevel;
-    Moving movement;
     Random rand;
     List<Food> foodList;
     List<BoardObject> powerUpList;
