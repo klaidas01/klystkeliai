@@ -19,7 +19,7 @@ import movementStrategy.IMovementStrategy;
 import movementStrategy.MovementDoubleSpeed;
 import movementStrategy.MovementHalfSpeed;
 import movementStrategy.MovementNormalSpeed;
-import movementStrategy.Moving;
+import timing.RevertScoreMultiplier;
 import timing.RevertSpeed;
 import timing.SpawnFood;
 import timing.SpawnPowerup;
@@ -30,7 +30,6 @@ public class Game {
     Player player1;
     Logger logger = Logger.getInstance();
     public ILevel currentLevel;
-    Moving movement;
     Random rand;
     List<Food> foodList;
     List<BoardObject> powerUpList;
@@ -55,6 +54,8 @@ public class Game {
         public int Score;
         IMovementStrategy movementStrategy;
         public int speedCount;
+        public int scoreCount;
+        public double scoreMultiplier;
 
         public Player(int x1, int y1, int x2, int y2, Socket socket, char mark) {
         	super(x1, y1, x2, y2);
@@ -64,6 +65,8 @@ public class Game {
             this.Score = 0;
             this.movementStrategy = new MovementNormalSpeed();
             this.speedCount = 0;
+            this.scoreCount = 0;
+            this.scoreMultiplier = 1;
         }
         
         public void setMovementStrategy(IMovementStrategy strategy)
@@ -133,7 +136,7 @@ public class Game {
             	if (collectedFood != null)
             	{
             		foodList.remove(collectedFood);
-            		this.Score += collectedFood.Value;
+            		this.Score += collectedFood.Value * this.scoreMultiplier;
             		output.println("SCORE " + this.Score + ';' + this.opponent.Score);
             		opponent.output.println("SCORE " + this.opponent.Score + ';' + this.Score);
             	}
@@ -144,12 +147,22 @@ public class Game {
             			case "DOUBLE_SPEED":
             				this.setMovementStrategy(new MovementDoubleSpeed());
             				this.speedCount += 1;
-            				timer.schedule(new RevertSpeed(this), 5000);
+            				timer.schedule(new RevertSpeed(this), Constants.POWERUP_DURATION);
             				break;
             			case "HALF_SPEED":
             				this.setMovementStrategy(new MovementHalfSpeed());
             				this.speedCount += 1;
-            				timer.schedule(new RevertSpeed(this), 5000);
+            				timer.schedule(new RevertSpeed(this), Constants.POWERUP_DURATION);
+            				break;
+            			case "DOUBLE_POINTS":
+            				this.scoreMultiplier = 2;
+            				this.scoreCount += 1;
+            				timer.schedule(new RevertScoreMultiplier(this), Constants.POWERUP_DURATION);
+            				break;
+            			case "ZERO_POINTS":
+            				this.scoreMultiplier = 0;
+            				this.scoreCount += 1;
+            				timer.schedule(new RevertScoreMultiplier(this), Constants.POWERUP_DURATION);
             				break;
             			default:
             				break;
