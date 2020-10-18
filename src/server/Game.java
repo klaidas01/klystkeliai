@@ -14,7 +14,7 @@ import boardObjects.PointFactory;
 import boardObjects.SpeedFactory;
 import enums.Constants;
 import levels.ILevel;
-import levels.LevelFactory;
+import levels.LevelBuilder;
 import movementStrategy.IMovementStrategy;
 import movementStrategy.MovementDoubleSpeed;
 import movementStrategy.MovementHalfSpeed;
@@ -35,8 +35,9 @@ public class Game {
     List<BoardObject> powerUpList;
     Timer timer;
     
-    public Game (String levelName) {
-    	currentLevel = LevelFactory.GetLevel(levelName);
+    public Game () {
+    	currentLevel = LevelBuilder.createBoxLevel();
+//    	currentLevel = LevelBuilder.createInvisibleBoxLevel();
     	rand = new Random();
     	foodList = new ArrayList<Food>();
     	powerUpList = new ArrayList<BoardObject>();
