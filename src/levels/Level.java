@@ -1,7 +1,6 @@
 package levels;
 
 import boardObjects.BoardObject;
-import boardObjects.NegativeObjectFactory;
 import enums.Constants;
 import server.MessageFormer;
 
@@ -19,6 +18,20 @@ public class Level implements ILevel {
             former.AddObject(wall);
         }
         levelString = former.message;
+    }
+
+    private Level(BoardObject[] objs) {
+        walls = new BoardObject[objs.length];
+        for (int i = 0; i < objs.length; i++) {
+            walls[i] = objs[i];
+            former.AddObject(objs[i]);
+        }
+        levelString = former.message;
+    }
+
+    @Override
+    protected Level clone() {
+        return new Level(walls);
     }
 
     public void addObj(BoardObject obj) {

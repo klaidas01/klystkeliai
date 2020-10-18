@@ -5,6 +5,11 @@ import boardObjects.BoardObject;
 public class LevelConfigurator {
     Level level = new Level();
 
+    public LevelConfigurator init(Level initLevel) {
+        level = initLevel.clone();
+        return this;
+    }
+
     public LevelConfigurator reset() {
         level = new Level();
         return this;
