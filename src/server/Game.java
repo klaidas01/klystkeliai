@@ -14,6 +14,8 @@ import boardObjects.PointFactory;
 import boardObjects.SpeedFactory;
 import enums.Constants;
 import levels.ILevel;
+import logging.ConsoleLogAdapter;
+import logging.FileLogAdapter;
 import looks.ILooks;
 import looks.BaseLooks;
 import levels.LevelBuilder;
@@ -30,7 +32,8 @@ import java.io.IOException;
 
 public class Game {
     public Player player1;
-    public Logger logger = Logger.getInstance();
+    public ConsoleLogAdapter consoleLogger = new ConsoleLogAdapter();
+    public FileLogAdapter fileLogAdapter = new FileLogAdapter();
     public ILevel currentLevel;
     public Random rand;
     public List<Food> foodList;
@@ -110,7 +113,8 @@ public class Game {
             input = new Scanner(socket.getInputStream());
             output = new PrintWriter(socket.getOutputStream(), true);
             output.println("WELCOME " + mark);
-            logger.logInfo("WELCOME " + mark);
+            consoleLogger.logInfo("WELCOME " + mark);
+            fileLogAdapter.logInfo("WELCOME " + mark);
             if (mark == 'A') {
                 player1 = this;
                 output.println("MESSAGE Waiting for opponent to connect");
