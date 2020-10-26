@@ -1,22 +1,31 @@
 package moveCommand;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class RemoteControl {
-	private ICommand command;
+	private List<ICommand> history;
 	
-	public RemoteControl() {}
-	
-	public void setCommand(ICommand c)
-	{
-		command = c;
+	public RemoteControl() {
+		history = new ArrayList<ICommand>();
 	}
 	
-	public void execute()
+	public void addCommand(ICommand c)
 	{
-		command.move();
+		history.add(c);
+		c.move();
+		if(history.size() > 100)
+		{
+			history.remove(0);
+		}
 	}
 	
 	public void undo()
 	{
-		command.undo();
+		if (history.size() != 0)
+		{
+			history.get(history.size() - 1).undo();
+			history.remove(history.size() - 1);
+		}
 	}
 }
