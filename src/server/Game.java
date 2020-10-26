@@ -27,6 +27,7 @@ import timing.RevertScoreMultiplier;
 import timing.RevertSpeed;
 import timing.SpawnFood;
 import timing.SpawnPowerup;
+import server.GameTimer;
 
 import java.io.IOException;
 
@@ -40,6 +41,7 @@ public class Game extends Observable {
     public List<BoardObject> powerUpList;
     public Timer timer;
     MessageFormer former;
+    GameTimer gameTimer;
     
     public Game () {
 //    	currentLevel = LevelBuilder.createBoxLevel();
@@ -51,6 +53,12 @@ public class Game extends Observable {
     	timer = new Timer(true);
     	former = new MessageFormer(Constants.ROWS_VALUE, currentLevel.levelString());
     	this.obs = new ArrayList<>();
+    }
+    
+    public void startTimer() {
+    	this.gameTimer = new GameTimer(this);
+    	attach(gameTimer);
+    	gameTimer.start();
     }
     
     public class Player extends BoardObject implements Runnable, IObserver {
@@ -126,6 +134,9 @@ public class Game extends Observable {
                 this.looks.draw();
                 output.println("POS " + former.message);
                 opponent.output.println("POS " + former.message);
+                
+                startTimer();
+                
                 timer.schedule(new SpawnFood(foodList, powerUpList, rand, currentLevel, this, former), 0, Constants.FOOD_DELAY);
                 timer.schedule(new SpawnPowerup(powerUpList, foodList, rand, currentLevel, this, former, new SpeedFactory()), 0, Constants.POWERUP_DELAY);
                 timer.schedule(new SpawnPowerup(powerUpList, foodList, rand, currentLevel, this, former, new PointFactory()), 0, Constants.POWERUP_DELAY);
@@ -205,6 +216,7 @@ public class Game extends Observable {
 		@Override
 		public void update() {
 			this.Score = 0;
+			this.output.println("SCORE " + this.Score + ';' + this.opponent.Score);
 		}
     }
 }

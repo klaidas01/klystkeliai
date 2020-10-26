@@ -108,7 +108,7 @@ public class client {
                 if (response.startsWith("TIME"))
                 {
                 	int seconds = Integer.parseInt(response.substring(5));
-                	scoreboard[1].setText("Time left: " + Math.floor(seconds / 60) + ":" + seconds % 60);
+                	scoreboard[1].setText("Time left: " + (int)(Math.floor(seconds / 60)) + ":" + String.format("%02d", seconds % 60));
                 }
                 if (response.startsWith("POS")) {
                 	var map = response.substring(4).toCharArray();
