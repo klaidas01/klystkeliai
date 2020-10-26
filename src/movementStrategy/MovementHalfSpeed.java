@@ -18,8 +18,7 @@ public class MovementHalfSpeed implements IMovementStrategy {
 		if (player.opponent == null) {
             throw new IllegalStateException("Can't move without an opponent");
         } else if (direction == 'U') {
-        	movement.setCommand(new Up(player, 1));
-            movement.execute();
+        	movement.addCommand(new Up(player, 1));
             if(Collision.doesCollideWithAny(level.getWalls(), player) || Collision.doesCollide(player, player.opponent))
             {
             	movement.undo();
@@ -28,8 +27,7 @@ public class MovementHalfSpeed implements IMovementStrategy {
         		player.opponent.output.println("SCORE " + player.opponent.Score + ';' + player.Score);
             }
         } else if (direction == 'D') {
-        	movement.setCommand(new Down(player, 1));
-            movement.execute();
+        	movement.addCommand(new Down(player, 1));
             if(Collision.doesCollideWithAny(level.getWalls(), player) || Collision.doesCollide(player, player.opponent))
             {
             	movement.undo();
@@ -38,8 +36,7 @@ public class MovementHalfSpeed implements IMovementStrategy {
         		player.opponent.output.println("SCORE " + player.opponent.Score + ';' + player.Score);
             }
         } else if (direction == 'R') {
-        	movement.setCommand(new Right(player, 1));
-            movement.execute();
+        	movement.addCommand(new Right(player, 1));
             if(Collision.doesCollideWithAny(level.getWalls(), player) || Collision.doesCollide(player, player.opponent))
             {
             	movement.undo();
@@ -48,8 +45,7 @@ public class MovementHalfSpeed implements IMovementStrategy {
         		player.opponent.output.println("SCORE " + player.opponent.Score + ';' + player.Score);
             }
         } else if (direction == 'L') {
-        	movement.setCommand(new Left(player, 1));
-            movement.execute();
+        	movement.addCommand(new Left(player, 1));
             if(Collision.doesCollideWithAny(level.getWalls(), player) || Collision.doesCollide(player, player.opponent))
             {
             	movement.undo();

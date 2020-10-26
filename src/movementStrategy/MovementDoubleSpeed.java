@@ -18,18 +18,15 @@ public class MovementDoubleSpeed implements IMovementStrategy {
 		if (player.opponent == null) {
             throw new IllegalStateException("Can't move without an opponent");
         } else if (direction == 'U') {
-        	movement.setCommand(new Up(player, 4));
-            movement.execute();
+        	movement.addCommand(new Up(player, 4));
             if(Collision.doesCollideWithAny(level.getWalls(), player) || Collision.doesCollide(player, player.opponent))
             {
             	movement.undo();
-            	movement.setCommand(new Up(player, 2));
-                movement.execute();
+            	movement.addCommand(new Up(player, 2));
                 if(Collision.doesCollideWithAny(level.getWalls(), player) || Collision.doesCollide(player, player.opponent))
                 {
                 	movement.undo();
-                	movement.setCommand(new Up(player, 1));
-                    movement.execute();
+                	movement.addCommand(new Up(player, 1));
                     if(Collision.doesCollideWithAny(level.getWalls(), player) || Collision.doesCollide(player, player.opponent))
                     {
                     	movement.undo();
@@ -40,18 +37,15 @@ public class MovementDoubleSpeed implements IMovementStrategy {
                 }
             }
         } else if (direction == 'D') {
-        	movement.setCommand(new Down(player, 4));
-            movement.execute();
+        	movement.addCommand(new Down(player, 4));
             if(Collision.doesCollideWithAny(level.getWalls(), player) || Collision.doesCollide(player, player.opponent))
             {
             	movement.undo();
-            	movement.setCommand(new Down(player, 2));
-                movement.execute();
+            	movement.addCommand(new Down(player, 2));
                 if(Collision.doesCollideWithAny(level.getWalls(), player) || Collision.doesCollide(player, player.opponent))
                 {
                 	movement.undo();
-                	movement.setCommand(new Down(player, 1));
-                    movement.execute();
+                	movement.addCommand(new Down(player, 1));
                     if(Collision.doesCollideWithAny(level.getWalls(), player) || Collision.doesCollide(player, player.opponent))
                     {
                     	movement.undo();
@@ -62,18 +56,15 @@ public class MovementDoubleSpeed implements IMovementStrategy {
                 }
             }
         } else if (direction == 'R') {
-        	movement.setCommand(new Right(player, 4));
-            movement.execute();
+        	movement.addCommand(new Right(player, 4));
             if(Collision.doesCollideWithAny(level.getWalls(), player) || Collision.doesCollide(player, player.opponent))
             {
             	movement.undo();
-            	movement.setCommand(new Right(player, 2));
-                movement.execute();
+            	movement.addCommand(new Right(player, 2));
                 if(Collision.doesCollideWithAny(level.getWalls(), player) || Collision.doesCollide(player, player.opponent))
                 {
                 	movement.undo();
-                	movement.setCommand(new Right(player, 1));
-                    movement.execute();
+                	movement.addCommand(new Right(player, 1));
                     if(Collision.doesCollideWithAny(level.getWalls(), player) || Collision.doesCollide(player, player.opponent))
                     {
                     	movement.undo();
@@ -84,18 +75,15 @@ public class MovementDoubleSpeed implements IMovementStrategy {
                 }
             }
         } else if (direction == 'L') {
-        	movement.setCommand(new Left(player, 4));
-            movement.execute();
+        	movement.addCommand(new Left(player, 4));
             if(Collision.doesCollideWithAny(level.getWalls(), player) || Collision.doesCollide(player, player.opponent))
             {
             	movement.undo();
-            	movement.setCommand(new Left(player, 2));
-                movement.execute();
+            	movement.addCommand(new Left(player, 2));
                 if(Collision.doesCollideWithAny(level.getWalls(), player) || Collision.doesCollide(player, player.opponent))
                 {
                 	movement.undo();
-                	movement.setCommand(new Left(player, 1));
-                    movement.execute();
+                	movement.addCommand(new Left(player, 1));
                     if(Collision.doesCollideWithAny(level.getWalls(), player) || Collision.doesCollide(player, player.opponent))
                     {
                     	movement.undo();
