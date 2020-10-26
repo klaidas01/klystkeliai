@@ -150,7 +150,7 @@ public class Game extends Observable {
             		foodList.remove(collectedFood);
             		this.Score += collectedFood.Value * this.scoreMultiplier;
             		
-            		if(this.Score == 10) {
+            		if(this.Score >= 10) {
             			notifyObs();
             		}
             		

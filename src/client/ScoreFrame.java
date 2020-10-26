@@ -13,7 +13,7 @@ public class ScoreFrame extends JPanel{
 	
 	public ScoreFrame()
 	{
-		this.setLayout(new GridLayout(1, 2, 10, 10));
+		this.setLayout(new GridLayout(1, 3, 10, 10));
 		this.setBackground(Color.white);
 		this.setPreferredSize(new Dimension(Constants.BOARD_SIZE, (int)(Constants.BOARD_SIZE * 0.05)));
 	}

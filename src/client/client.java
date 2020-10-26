@@ -26,7 +26,7 @@ public class client {
 	private JFrame frame = new JFrame("Klystkeliai");
 	
     private Square[] board = new Square[Constants.ROWS_VALUE * Constants.ROWS_VALUE];
-    private JLabel[] scoreboard = new JLabel[2];
+    private JLabel[] scoreboard = new JLabel[3];
 
     private Socket socket;
     private Scanner in;
@@ -47,7 +47,19 @@ public class client {
         ScoreFrame scorePanel = new ScoreFrame();
         
         for (var i = 0; i < scoreboard.length; i++) {
-        	String text = ((i == 0) ? "Your score: 0" : "Opponents score: 0");
+        	String text = "";
+        	switch (i)
+        	{
+        		case 0: 
+        			text =  "Your score: 0";
+        			break;
+        		case 1:
+        			text = "Time left: 5:00";
+        			break;
+        		case 2:
+        			text = "Opponents score: 0";
+        			
+        	}
         	scoreboard[i] = new JLabel(text, SwingConstants.CENTER);
         	scoreboard[i].setLayout(new GridBagLayout());
         	Border border = BorderFactory.createLineBorder(Color.BLACK, 5);
@@ -91,7 +103,12 @@ public class client {
                 	var scoreString = response.substring(6);
                 	String[] scoreStrings = scoreString.split(";", 0);
                 	scoreboard[0].setText("Your score: " + scoreStrings[0]);
-                	scoreboard[1].setText("Opponents score: " + scoreStrings[1]);
+                	scoreboard[2].setText("Opponents score: " + scoreStrings[1]);
+                }
+                if (response.startsWith("TIME"))
+                {
+                	int seconds = Integer.parseInt(response.substring(5));
+                	scoreboard[1].setText("Time left: " + Math.floor(seconds / 60) + ":" + seconds % 60);
                 }
                 if (response.startsWith("POS")) {
                 	var map = response.substring(4).toCharArray();
