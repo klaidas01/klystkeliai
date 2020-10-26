@@ -30,7 +30,7 @@ import timing.SpawnPowerup;
 
 import java.io.IOException;
 
-public class Game {
+public class Game extends Observable {
     public Player player1;
     public ConsoleLogAdapter consoleLogger = new ConsoleLogAdapter();
     public FileLogAdapter fileLogAdapter = new FileLogAdapter();
@@ -50,9 +50,10 @@ public class Game {
     	powerUpList = new ArrayList<BoardObject>();
     	timer = new Timer(true);
     	former = new MessageFormer(Constants.ROWS_VALUE, currentLevel.levelString());
+    	this.obs = new ArrayList<>();
     }
-
-    public class Player extends BoardObject implements Runnable {
+    
+    public class Player extends BoardObject implements Runnable, IObserver {
         char mark;
         public Player opponent;
         Socket socket;
@@ -86,7 +87,7 @@ public class Game {
         {
         	this.movementStrategy = strategy;
         }
-
+        
         @Override
         public void run() {
             try {
@@ -138,7 +139,6 @@ public class Game {
             }
         }
 
-
         private void processMoveCommand(char direction) {
             try {
             	former.newMessage();
@@ -149,6 +149,11 @@ public class Game {
             	{
             		foodList.remove(collectedFood);
             		this.Score += collectedFood.Value * this.scoreMultiplier;
+            		
+            		if(this.Score == 10) {
+            			notifyObs();
+            		}
+            		
             		output.println("SCORE " + this.Score + ';' + this.opponent.Score);
             		opponent.output.println("SCORE " + this.opponent.Score + ';' + this.Score);
             	}
@@ -196,6 +201,11 @@ public class Game {
                 output.println("MESSAGE " + e.getMessage());
             }
         }
+
+		@Override
+		public void update() {
+			this.Score = 0;
+		}
     }
 }
 	
