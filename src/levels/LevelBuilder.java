@@ -26,7 +26,7 @@ public class LevelBuilder {
     public static Level createBibleLevel() {
         return configurator.reset().init(createBoxLevel())
                 .addWall(NegativeObjectFactory.GetNegativeObject(45, 49, 55, 51, "BLACK_WALL"))
-                .addWall(NegativeObjectFactory.GetNegativeObject(49, 44, 51, 60, "BLACK_WALL"))
+                .addWall(NegativeObjectFactory.GetNegativeObject(49, 44, 51, 60, "FAKE_WALL"))
                 .build();
     }
 

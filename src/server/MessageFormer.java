@@ -27,6 +27,7 @@ public class MessageFormer {
 		for (int i = obj.northWestCoord.Y; i <= obj.southEastCoord.Y; i++)
 	        for (int j = obj.northWestCoord.X; j <= obj.southEastCoord.X; j++)
 	            {
+	        		if (message.charAt(j + i * size) != 'w')
 	        		switch(obj.getName()) {
 	        			case "P1":
 	        				message.setCharAt(j + i * size, '1');
@@ -35,6 +36,7 @@ public class MessageFormer {
 	        				message.setCharAt(j + i * size, '2');
 	        				break;
 	        			case "BLACK_WALL":
+	        			case "FAKE_WALL":
 	        				message.setCharAt(j + i * size, 'w');
 	        				break;
 	        			case "FOOD":
@@ -64,12 +66,14 @@ public class MessageFormer {
 		for (int i = northWestCoord.Y; i <= southEastCoord.Y; i++)
 	        for (int j = northWestCoord.X; j <= southEastCoord.X; j++)
 	            {
+	        		if (message.charAt(j + i * size) != 'w')
 	        		message.setCharAt(j + i * size, color);
 	            }
 	}
 	
 	public void AddPixel(int x, int y, char color)
 	{
+		if (message.charAt(x + y * size) != 'w')
 		message.setCharAt(x + y * size, color);
 	}
 
