@@ -8,7 +8,6 @@ import boardObjects.BoardObject;
 import boardObjects.Food;
 import enums.Constants;
 import levels.ILevel;
-import looks.RedCenterDecorator;
 import server.Collision;
 import server.Game.Player;
 import server.MessageFormer;

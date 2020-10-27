@@ -3,14 +3,18 @@ package looks;
 import server.Game.Player;
 import server.MessageFormer;
 
-public class PlayerDecorator implements ILooks {
+public class PlayerShapeDecorator implements ILooks {
 	
 	protected final ILooks toBeDecorated; // the looks object being decorated
-	
-	public PlayerDecorator (ILooks toBeDecorated) {
-        this.toBeDecorated = toBeDecorated;
-    }
-	
+	protected Color colorUse;
+
+
+	public PlayerShapeDecorator(ILooks toBeDecorated, Color color) {
+		this.toBeDecorated = toBeDecorated;
+		colorUse=color;
+	}
+
+
 	@Override
 	public void draw() {
 		toBeDecorated.draw();
