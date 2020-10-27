@@ -27,6 +27,7 @@ import timing.RevertScoreMultiplier;
 import timing.RevertSpeed;
 import timing.SpawnFood;
 import timing.SpawnPowerup;
+import timing.TimerFacade;
 import server.GameTimer;
 
 import java.io.IOException;
@@ -39,9 +40,9 @@ public class Game extends Observable {
     public Random rand;
     public List<Food> foodList;
     public List<BoardObject> powerUpList;
-    public Timer timer;
     MessageFormer former;
     GameTimer gameTimer;
+    TimerFacade timer;
     
     public Game () {
 //    	currentLevel = LevelBuilder.createBoxLevel();
@@ -50,7 +51,7 @@ public class Game extends Observable {
     	rand = new Random();
     	foodList = new ArrayList<Food>();
     	powerUpList = new ArrayList<BoardObject>();
-    	timer = new Timer(true);
+    	timer = new TimerFacade();
     	former = new MessageFormer(Constants.ROWS_VALUE, currentLevel.levelString());
     	this.obs = new ArrayList<>();
     }
@@ -137,9 +138,7 @@ public class Game extends Observable {
                 
                 startTimer();
                 
-                timer.schedule(new SpawnFood(foodList, powerUpList, rand, currentLevel, this, former), 0, Constants.FOOD_DELAY);
-                timer.schedule(new SpawnPowerup(powerUpList, foodList, rand, currentLevel, this, former, new SpeedFactory()), 0, Constants.POWERUP_DELAY);
-                timer.schedule(new SpawnPowerup(powerUpList, foodList, rand, currentLevel, this, former, new PointFactory()), 0, Constants.POWERUP_DELAY);
+                timer.setupSpawnTimers(foodList, powerUpList, rand, currentLevel, this, former);
             }
         }
 
@@ -161,7 +160,7 @@ public class Game extends Observable {
             		foodList.remove(collectedFood);
             		this.Score += collectedFood.Value * this.scoreMultiplier;
             		
-            		if(this.Score >= 10) {
+            		if(this.Score >= 100) {
             			notifyObs();
             		}
             		
@@ -175,22 +174,22 @@ public class Game extends Observable {
             			case "DOUBLE_SPEED":
             				this.setMovementStrategy(new MovementDoubleSpeed());
             				this.speedCount += 1;
-            				timer.schedule(new RevertSpeed(this), Constants.POWERUP_DURATION);
+            				timer.CollectedPowerUp(this, "speed");
             				break;
             			case "HALF_SPEED":
             				this.setMovementStrategy(new MovementHalfSpeed());
             				this.speedCount += 1;
-            				timer.schedule(new RevertSpeed(this), Constants.POWERUP_DURATION);
+            				timer.CollectedPowerUp(this, "speed");
             				break;
             			case "DOUBLE_POINTS":
             				this.scoreMultiplier = 2;
             				this.scoreCount += 1;
-            				timer.schedule(new RevertScoreMultiplier(this), Constants.POWERUP_DURATION);
+            				timer.CollectedPowerUp(this, "points");
             				break;
             			case "ZERO_POINTS":
             				this.scoreMultiplier = 0;
             				this.scoreCount += 1;
-            				timer.schedule(new RevertScoreMultiplier(this), Constants.POWERUP_DURATION);
+            				timer.CollectedPowerUp(this, "points");
             				break;
             			default:
             				break;
