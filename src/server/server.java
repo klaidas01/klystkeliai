@@ -2,11 +2,12 @@ package server;
 
 import java.net.ServerSocket;
 import java.util.concurrent.Executors;
-import java.util.List;
-import java.util.ArrayList;
 
 import looks.BaseLooks;
 import looks.*;
+import looks.color.Blue;
+import looks.color.Red;
+import looks.color.White;
 import server.Game.Player;
 
 public class server {
@@ -24,9 +25,9 @@ public class server {
                 
                 game.attach(p1);
                 game.attach(p2);
-                
-                p1.setLooks(new BlueCornersDecorator(new WhiteCenterDecorator(new BaseLooks(game.former, p1))));
-                p2.setLooks(new RedCornersDecorator(new BlueCenterDecorator(new BaseLooks(game.former, p2))));
+
+                p1.setLooks(new CornersDecorator(new CenterDecorator (new BaseLooks(game.former, p1), new White()), new Blue()));
+                p2.setLooks(new CornersDecorator(new CenterDecorator (new BaseLooks(game.former, p2), new Blue()), new Red()));
             }
         }
     }
