@@ -14,6 +14,7 @@ public class Collision {
 	
 	public static boolean doesCollide(BoardObject object, BoardObject object2)
 	{
+		if (object.getName() == "FAKE_WALL") return false;
 		return !(object2.northWestCoord.X > object.southEastCoord.X 
 				|| object2.southEastCoord.X < object.northWestCoord.X
 				|| object2.northWestCoord.Y > object.southEastCoord.Y
