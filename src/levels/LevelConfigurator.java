@@ -7,6 +7,12 @@ public class LevelConfigurator {
 
     public LevelConfigurator init(Level initLevel) {
         level = initLevel.clone();
+        System.out.println("Old hash");
+        System.out.println(initLevel.hashCode());
+        System.out.println("New hash");
+        System.out.println(level.hashCode());
+//        System.out.println(initLevel.former.hashCode());
+//        System.out.println(level.former.hashCode());
         return this;
     }
 

@@ -20,6 +20,12 @@ public class Level implements ILevel {
         levelString = former.message;
     }
 
+    private Level(StringBuilder builder, BoardObject[] objects, MessageFormer messageFormer){
+        levelString = builder;
+        walls = objects;
+        former = messageFormer;
+    }
+
     private Level(BoardObject[] objs) {
         walls = new BoardObject[objs.length];
         for (int i = 0; i < objs.length; i++) {
@@ -31,6 +37,8 @@ public class Level implements ILevel {
 
     @Override
     protected Level clone() {
+//        return this;
+//        return new Level(levelString, walls, former);
         return new Level(walls);
     }
 
