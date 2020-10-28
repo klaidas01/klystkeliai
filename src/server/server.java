@@ -13,7 +13,7 @@ import server.Game.Player;
 public class server {
 	
 	public static void main(String[] args) throws Exception {
-        try (var listener = new ServerSocket(58901)) {
+        try (var listener = new ServerSocket(8080)) {
             System.out.println("Game Server is Running...");
             var pool = Executors.newFixedThreadPool(200);
             while (true) {
