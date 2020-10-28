@@ -34,7 +34,7 @@ public class client {
     
     public client(String serverAddress) throws Exception {
 
-        socket = new Socket(serverAddress, 58901);
+        socket = new Socket(serverAddress, 8080);
         in = new Scanner(socket.getInputStream());
         out = new PrintWriter(socket.getOutputStream(), true);
 
