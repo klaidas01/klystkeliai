@@ -3,12 +3,9 @@ package server;
 import java.net.ServerSocket;
 import java.util.concurrent.Executors;
 
-import looks.BaseLooks;
-import looks.*;
-import looks.color.Blue;
-import looks.color.Red;
-import looks.color.White;
 import server.Game.Player;
+import template.Player1;
+import template.Player2;
 
 public class server {
 	
@@ -18,16 +15,15 @@ public class server {
             var pool = Executors.newFixedThreadPool(200);
             while (true) {
                 Game game = new Game();
-                Player p1 = game.new Player(1, 1, 4, 4, listener.accept(), 'A');
+                Player p1 = new Player1(game, listener.accept());
+                p1.setupPlayerTemplate();
                 pool.execute(p1);
-                Player p2 = game.new Player(40, 40, 43, 43, listener.accept(), 'B');
+                Player p2 = new Player2(game, listener.accept());
+                p2.setupPlayerTemplate();
                 pool.execute(p2);
                 
                 game.attach(p1);
                 game.attach(p2);
-
-                p1.setLooks(new CornersDecorator(new CenterDecorator (new BaseLooks(game.former, p1), new White()), new Blue()));
-                p2.setLooks(new CornersDecorator(new CenterDecorator (new BaseLooks(game.former, p2), new Blue()), new Red()));
             }
         }
     }

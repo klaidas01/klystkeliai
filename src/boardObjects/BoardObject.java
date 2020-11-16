@@ -12,5 +12,7 @@ public abstract class BoardObject {
 		southEastCoord = new Coordinates(x2, y2);
 	}
 	
+	public BoardObject() {}
+	
 	public abstract String getName();
 }
