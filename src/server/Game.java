@@ -40,9 +40,9 @@ public class Game extends Observable {
     public Random rand;
     public List<Food> foodList;
     public List<BoardObject> powerUpList;
-    MessageFormer former;
+    public MessageFormer former;
     GameTimer gameTimer;
-    TimerFacade timer;
+    public TimerFacade timer;
     
     public Game () {
 //    	currentLevel = LevelBuilder.createBoxLevel();
@@ -62,11 +62,10 @@ public class Game extends Observable {
     	gameTimer.start();
     }
     
-    public class Player extends BoardObject implements Runnable, IObserver {
-        char mark;
+    public abstract class Player extends BoardObject implements Runnable, IObserver {
         public Player opponent;
-        Socket socket;
-        Scanner input;
+        protected Socket socket;
+        protected Scanner input;
         public PrintWriter output;
         public int Score;
         IMovementStrategy movementStrategy;
@@ -74,22 +73,35 @@ public class Game extends Observable {
         public int scoreCount;
         public double scoreMultiplier;
         public ILooks looks;
+        public String name;
+        protected Game game;
 
-        public Player(int x1, int y1, int x2, int y2, Socket socket, char mark) {
-        	super(x1, y1, x2, y2);
+        public Player(Socket socket, Game game) {
+        	super();
             this.socket = socket;
-            this.mark = mark;
             this.Score = 0;
             this.movementStrategy = new MovementNormalSpeed();
             this.speedCount = 0;
             this.scoreCount = 0;
             this.scoreMultiplier = 1;
             this.looks = new BaseLooks(former, this);
+            this.game  = game;
         }
         
-        public void setLooks(ILooks looks)
+        public abstract void setLooks();
+        
+        public abstract void setName();
+        
+        public abstract void setPosition();
+        
+        public abstract void setupGame() throws IOException;
+        
+        public final void setupPlayerTemplate() throws IOException
         {
-        	this.looks = looks;
+        	setLooks();
+        	setName();
+        	setPosition();
+        	setupGame();
         }
         
         public void setMovementStrategy(IMovementStrategy strategy)
@@ -97,10 +109,14 @@ public class Game extends Observable {
         	this.movementStrategy = strategy;
         }
         
+        public String getName()
+        {
+        	return this.name;
+        }
+        
         @Override
         public void run() {
             try {
-                setup();
                 processCommands();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -112,33 +128,6 @@ public class Game extends Observable {
                     socket.close();
                 } catch (IOException e) {
                 }
-            }
-        }
-        
-        public String getName() {
-    		return this.mark == 'A' ? "P1" : "P2";
-    	}
-
-        private void setup() throws IOException {
-            input = new Scanner(socket.getInputStream());
-            output = new PrintWriter(socket.getOutputStream(), true);
-            output.println("WELCOME " + mark);
-            consoleLogger.logInfo("WELCOME " + mark);
-            fileLogAdapter.logInfo("WELCOME " + mark);
-            if (mark == 'A') {
-                player1 = this;
-                output.println("MESSAGE Waiting for opponent to connect");
-            } else {
-                opponent = player1;
-                opponent.opponent = this;
-                this.opponent.looks.draw();
-                this.looks.draw();
-                output.println("POS " + former.message);
-                opponent.output.println("POS " + former.message);
-                
-                startTimer();
-                
-                timer.setupSpawnTimers(foodList, powerUpList, rand, currentLevel, this, former);
             }
         }
 
