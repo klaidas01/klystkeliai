@@ -25,6 +25,7 @@ public class FileLog {
         try {
             FileWriter myWriter = new FileWriter(fileName,true);
             myWriter.write(message);
+            myWriter.write("\n");
             myWriter.close();
         } catch (IOException e) {
             System.out.println("An error occurred when logging to file\n");
