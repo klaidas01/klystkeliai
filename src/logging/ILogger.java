@@ -1,7 +1,9 @@
 package logging;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 interface ILogger  {
 
@@ -11,6 +13,6 @@ interface ILogger  {
 
     void logInfo(String message) throws IOException;
 
-    ArrayList<String> getMessages();
+    Iterator<String> getMessages() throws FileNotFoundException;
 
 }

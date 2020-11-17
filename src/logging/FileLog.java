@@ -1,8 +1,10 @@
 package logging;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Scanner;
 
 public class FileLog {
     private static FileLog instance = null;
@@ -25,10 +27,28 @@ public class FileLog {
         try {
             FileWriter myWriter = new FileWriter(fileName,true);
             myWriter.write(message);
+            myWriter.write("\n");
             myWriter.close();
         } catch (IOException e) {
             System.out.println("An error occurred when logging to file\n");
             e.printStackTrace();
         }
+    }
+
+    public Iterator<String> getIterator(String fileName) throws FileNotFoundException {
+        List<String> info = new ArrayList<>();
+        try {
+            File myObj = new File(fileName);
+            Scanner myReader = new Scanner(myObj);
+            while (myReader.hasNextLine()) {
+                String data = myReader.nextLine();
+                info.add(data);
+            }
+            myReader.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+        return info.iterator();
     }
 }

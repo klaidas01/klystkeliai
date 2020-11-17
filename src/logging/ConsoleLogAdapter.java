@@ -1,6 +1,7 @@
 package logging;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class ConsoleLogAdapter implements ILogger {
 
@@ -18,7 +19,7 @@ public class ConsoleLogAdapter implements ILogger {
     }
 
     @Override
-    public ArrayList<String> getMessages() {
-        return messages;
+    public Iterator<String> getMessages() {
+        return messages.iterator();
     }
 }
