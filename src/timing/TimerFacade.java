@@ -36,11 +36,11 @@ public class TimerFacade {
 	{
 		switch (powerUpType) {
 			case "speed":
-				var revertSpeedTask = new RevertSpeed(player);
-				timer.schedule(revertSpeedTask, Constants.POWERUP_DURATION);
+				timer.schedule(new RevertSpeed(player), Constants.POWERUP_DURATION);
+				break;
 			case "points":
-				var revertPointsTask = new RevertSpeed(player);
-				timer.schedule(revertPointsTask, Constants.POWERUP_DURATION);
+				timer.schedule(new RevertScoreMultiplier(player), Constants.POWERUP_DURATION);
+				break;
 		}
 	}
 }
