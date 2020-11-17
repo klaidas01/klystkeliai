@@ -1,12 +1,9 @@
 package server;
 
+import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.Random;
-import java.util.Scanner;
-import java.util.Timer;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import boardObjects.BoardObject;
 import boardObjects.Food;
@@ -44,7 +41,7 @@ public class Game extends Observable {
     GameTimer gameTimer;
     TimerFacade timer;
     
-    public Game () {
+    public Game () throws FileNotFoundException {
 //    	currentLevel = LevelBuilder.createBoxLevel();
 //    	currentLevel = LevelBuilder.createInvisibleBoxLevel();
     	currentLevel = LevelBuilder.createBibleLevel();
@@ -54,12 +51,18 @@ public class Game extends Observable {
     	timer = new TimerFacade();
     	former = new MessageFormer(Constants.ROWS_VALUE, currentLevel.levelString());
     	this.obs = new ArrayList<>();
+    	checkLogs();
     }
     
     public void startTimer() {
     	this.gameTimer = new GameTimer(this);
     	attach(gameTimer);
     	gameTimer.start();
+    }
+
+    private void checkLogs() throws FileNotFoundException {
+        for(Iterator<String> i = fileLogAdapter.getMessages(); i.hasNext();)
+            System.out.printf("ITERATOR RETURNED: %s%n", i.next());
     }
     
     public class Player extends BoardObject implements Runnable, IObserver {
