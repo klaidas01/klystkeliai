@@ -1,5 +1,7 @@
 package boardObjects;
 
+import server.MessageFormer;
+
 public class BlackWall extends NegativeObject {
 	public BlackWall(int x1, int y1, int x2, int y2)
 	{

@@ -1,63 +1,46 @@
 package timing;
 
-import java.util.List;
 import java.util.Random;
 import java.util.TimerTask;
 
-import boardObjects.BoardObject;
 import boardObjects.Food;
+import composite.BoardObjectComposite;
 import enums.Constants;
 import levels.ILevel;
 import server.Collision;
+import server.Game;
 import server.Game.Player;
 import server.MessageFormer;
 
 public class SpawnFood extends TimerTask {
 	
-	private List<Food> foodList;
-	private List<BoardObject> powerUpList;
-	private Random rand;
-	private ILevel currentLevel;
-	private Player player;
-	private MessageFormer former;
+	private Game game;
 	
-	public SpawnFood(List<Food> _food, List<BoardObject> _powerups, Random _rand, ILevel _level, Player _player, MessageFormer _former)
+	public SpawnFood(Game _game)
 	{
-		foodList = _food;
-		powerUpList = _powerups;
-		rand = _rand;
-		currentLevel = _level;
-		player = _player;
-		former = _former;
+		game = _game;
 	}
 
 	@Override
 	public void run() {
-		if (foodList.size() < Constants.FOOD_COUNT)
+		if (game.foodCount < Constants.FOOD_COUNT)
     	{
-    		int size = rand.nextInt(3);
-    		int x = rand.nextInt(Constants.ROWS_VALUE);
-    		int y = rand.nextInt(Constants.ROWS_VALUE);
+    		int size = game.rand.nextInt(3);
+    		int x = game.rand.nextInt(Constants.ROWS_VALUE);
+    		int y = game.rand.nextInt(Constants.ROWS_VALUE);
     		Food newFood = new Food(x, y, x + size, y + size, size + 1);
-    		if (!(Collision.doesCollideWithAny(currentLevel.getWalls(), newFood)
-    				|| Collision.doesCollideWithAny(powerUpList.toArray(new BoardObject[0]), newFood)
-    				|| Collision.doesCollideWithAny(foodList.toArray(new Food[0]), newFood)))
+    		if (!(Collision.doesCollideWithAny(game.currentLevel.getWalls(), newFood)
+    				|| game.objectComposite.doesCollide(newFood) != null))
     		{
-    			foodList.add(newFood);
+    			game.objectComposite.add(newFood);
+    			game.foodCount++;
     		}
-    		former.newMessage();
-    		for (BoardObject o : powerUpList)
-        	{
-        		former.AddObject(o);
-        	}
-    		for (Food f : foodList)
-        	{
-        		former.AddObject(f);
-        	}
-    		player.looks.draw();
-    		player.opponent.looks.draw();
-            player.output.println("POS " + former.message);
-            player.opponent.output.println("POS " + former.message);
+    		game.former.newMessage();
+    		game.objectComposite.draw(game.former);
+    		game.player1.draw(game.former);
+    		game.player1.opponent.draw(game.former);
+    		game.player1.output.println("POS " + game.former.message);
+    		game.player1.opponent.output.println("POS " + game.former.message);
     	}
 	}
 
