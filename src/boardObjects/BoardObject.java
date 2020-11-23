@@ -1,6 +1,7 @@
 package boardObjects;
-
+import server.Collision;
 import server.Coordinates;
+import server.MessageFormer;
 
 public abstract class BoardObject {
 	public Coordinates northWestCoord;
@@ -15,4 +16,13 @@ public abstract class BoardObject {
 	public BoardObject() {}
 	
 	public abstract String getName();
+	
+	public void draw(MessageFormer former) {
+		former.AddObject(this);
+		
+	}
+
+	public BoardObject doesCollide(BoardObject obj) {
+		return Collision.doesCollide(obj, this) ? obj : null;
+	}
 }

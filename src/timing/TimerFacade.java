@@ -8,9 +8,11 @@ import boardObjects.BoardObject;
 import boardObjects.Food;
 import boardObjects.PointFactory;
 import boardObjects.SpeedFactory;
+import composite.BoardObjectComposite;
 import enums.Constants;
 import levels.ILevel;
 import server.MessageFormer;
+import server.Game;
 import server.Game.Player;
 
 public class TimerFacade {
@@ -22,11 +24,11 @@ public class TimerFacade {
 		this.timer = new Timer(true);
 	}
 	
-	public void setupSpawnTimers(List<Food> foodList, List<BoardObject> powerUpList, Random rand, ILevel currentLevel, Player player, MessageFormer former)
+	public void setupSpawnTimers(Game game)
 	{
-		var foodTask = new SpawnFood(foodList, powerUpList, rand, currentLevel, player, former);
-		var speedTask = new SpawnPowerup(powerUpList, foodList, rand, currentLevel, player, former, new SpeedFactory());
-		var pointsTask = new SpawnPowerup(powerUpList, foodList, rand, currentLevel, player, former, new PointFactory());
+		var foodTask = new SpawnFood(game);
+		var speedTask = new SpawnPowerup(game, new SpeedFactory());
+		var pointsTask = new SpawnPowerup(game, new PointFactory());
 		timer.schedule(foodTask, 0, Constants.FOOD_DELAY);
         timer.schedule(speedTask, 0, Constants.POWERUP_DELAY);
         timer.schedule(pointsTask, 0, Constants.POWERUP_DELAY);

@@ -7,8 +7,7 @@ import java.util.*;
 
 import boardObjects.BoardObject;
 import boardObjects.Food;
-import boardObjects.PointFactory;
-import boardObjects.SpeedFactory;
+import composite.BoardObjectComposite;
 import enums.Constants;
 import levels.ILevel;
 import logging.ConsoleLogAdapter;
@@ -20,12 +19,7 @@ import movementStrategy.IMovementStrategy;
 import movementStrategy.MovementDoubleSpeed;
 import movementStrategy.MovementHalfSpeed;
 import movementStrategy.MovementNormalSpeed;
-import timing.RevertScoreMultiplier;
-import timing.RevertSpeed;
-import timing.SpawnFood;
-import timing.SpawnPowerup;
 import timing.TimerFacade;
-import server.GameTimer;
 
 import java.io.IOException;
 
@@ -33,12 +27,13 @@ public class Game extends Observable {
     public Player player1;
     public ConsoleLogAdapter consoleLogger = new ConsoleLogAdapter();
     public FileLogAdapter fileLogAdapter = new FileLogAdapter();
+    public BoardObjectComposite objectComposite = new BoardObjectComposite();
     public ILevel currentLevel;
     public Random rand;
-    public List<Food> foodList;
-    public List<BoardObject> powerUpList;
     public MessageFormer former;
     GameTimer gameTimer;
+    public int powerupCount = 0;
+    public int foodCount = 0;
     public TimerFacade timer;
     
     public Game () throws FileNotFoundException {
@@ -46,8 +41,6 @@ public class Game extends Observable {
 //    	currentLevel = LevelBuilder.createInvisibleBoxLevel();
     	currentLevel = LevelBuilder.createBibleLevel();
     	rand = new Random();
-    	foodList = new ArrayList<Food>();
-    	powerUpList = new ArrayList<BoardObject>();
     	timer = new TimerFacade();
     	former = new MessageFormer(Constants.ROWS_VALUE, currentLevel.levelString());
     	this.obs = new ArrayList<>();
@@ -90,6 +83,12 @@ public class Game extends Observable {
             this.looks = new BaseLooks(former, this);
             this.game  = game;
         }
+        
+        @Override
+    	public void draw(MessageFormer former) {
+    		this.looks.draw();
+    		
+    	}
         
         public abstract void setLooks();
         
@@ -145,24 +144,25 @@ public class Game extends Observable {
             try {
             	former.newMessage();
             	movementStrategy.move(currentLevel, this, direction);
-            	Food collectedFood = (Food)Collision.findObject(foodList.toArray(new Food[0]), this);
-            	BoardObject collectedPowerUp = Collision.findObject(powerUpList.toArray(new BoardObject[0]), this);
-            	if (collectedFood != null)
+            	BoardObject collectedObject = objectComposite.doesCollide(this);
+            	if (collectedObject != null)
             	{
-            		foodList.remove(collectedFood);
-            		this.Score += collectedFood.Value * this.scoreMultiplier;
-            		
-            		if(this.Score >= 100) {
-            			notifyObs();
+            		objectComposite.remove(collectedObject);
+            		if (collectedObject.getName() == "FOOD")
+            		{
+            			foodCount--;
+            			this.Score += ((Food)collectedObject).Value * this.scoreMultiplier;
+            			
+            			if(this.Score >= 100) {
+                			notifyObs();
+                		}
+            			
+            			output.println("SCORE " + this.Score + ';' + this.opponent.Score);
+                		opponent.output.println("SCORE " + this.opponent.Score + ';' + this.Score);
             		}
-            		
-            		output.println("SCORE " + this.Score + ';' + this.opponent.Score);
-            		opponent.output.println("SCORE " + this.opponent.Score + ';' + this.Score);
-            	}
-            	if (collectedPowerUp != null)
-            	{
-            		powerUpList.remove(collectedPowerUp);
-            		switch (collectedPowerUp.getName()) {
+            		else {
+            			powerupCount--;
+            			switch (collectedObject.getName()) {
             			case "DOUBLE_SPEED":
             				this.setMovementStrategy(new MovementDoubleSpeed());
             				this.speedCount += 1;
@@ -185,16 +185,10 @@ public class Game extends Observable {
             				break;
             			default:
             				break;
+            			}
             		}
             	}
-            	for (Food f : foodList)
-            	{
-            		former.AddObject(f);
-            	}
-            	for (BoardObject o : powerUpList)
-            	{
-            		former.AddObject(o);
-            	}
+            	objectComposite.draw(former);
                 this.looks.draw();
                 this.opponent.looks.draw();
                 output.println("POS " + former.message);

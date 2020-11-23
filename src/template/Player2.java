@@ -46,7 +46,7 @@ public class Player2 extends Player {
         
         game.startTimer();
         
-        game.timer.setupSpawnTimers(game.foodList, game.powerUpList, game.rand, game.currentLevel, this, game.former);
+        game.timer.setupSpawnTimers(game);
     }
 	
 	@Override
