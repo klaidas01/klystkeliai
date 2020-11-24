@@ -34,21 +34,4 @@ public class FileLog {
             e.printStackTrace();
         }
     }
-
-    public Iterator<String> getIterator(String fileName) throws FileNotFoundException {
-        List<String> info = new ArrayList<>();
-        try {
-            File myObj = new File(fileName);
-            Scanner myReader = new Scanner(myObj);
-            while (myReader.hasNextLine()) {
-                String data = myReader.nextLine();
-                info.add(data);
-            }
-            myReader.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
-        return info.iterator();
-    }
 }
