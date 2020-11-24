@@ -45,7 +45,7 @@ public class Game extends Observable {
     	timer = new TimerFacade();
     	former = new MessageFormer(Constants.ROWS_VALUE, currentLevel.levelString());
     	this.obs = new ArrayList<>();
-//    	checkLogs();
+    	checkLogs();
     }
     
     public void startTimer() {
