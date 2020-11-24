@@ -2,7 +2,6 @@ package logging;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Iterator;
 
 public class FileLogAdapter implements ILogger{
@@ -22,7 +21,7 @@ public class FileLogAdapter implements ILogger{
     }
 
     @Override
-    public Iterator<String> getMessages() throws FileNotFoundException {
-        return fileLog.getIterator(fileName);
+    public FileIterator getMessages() throws FileNotFoundException {
+        return new FileIterator(fileName);
     }
 }

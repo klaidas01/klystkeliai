@@ -11,6 +11,7 @@ import composite.BoardObjectComposite;
 import enums.Constants;
 import levels.ILevel;
 import logging.ConsoleLogAdapter;
+import logging.FileIterator;
 import logging.FileLogAdapter;
 import looks.ILooks;
 import looks.BaseLooks;
@@ -44,7 +45,7 @@ public class Game extends Observable {
     	timer = new TimerFacade();
     	former = new MessageFormer(Constants.ROWS_VALUE, currentLevel.levelString());
     	this.obs = new ArrayList<>();
-    	checkLogs();
+//    	checkLogs();
     }
     
     public void startTimer() {
@@ -54,7 +55,7 @@ public class Game extends Observable {
     }
 
     private void checkLogs() throws FileNotFoundException {
-        for(Iterator<String> i = fileLogAdapter.getMessages(); i.hasNext();)
+        for(FileIterator i = fileLogAdapter.getMessages(); i.hasNext();)
             System.out.printf("ITERATOR RETURNED: %s%n", i.next());
     }
     
