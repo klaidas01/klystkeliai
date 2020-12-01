@@ -2,6 +2,7 @@ package logging;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
@@ -20,6 +21,7 @@ public class FileIterator implements Iterator {
         boolean result = false;
         try {
             File myObj = new File(fileName);
+            myObj.createNewFile();
             Scanner myReader = new Scanner(myObj);
             for(int i = 0; i < offset - 1; i++) myReader.nextLine();
             result = myReader.hasNextLine();
@@ -29,7 +31,10 @@ public class FileIterator implements Iterator {
             e.printStackTrace();
         } catch (NoSuchElementException e) {
             return false;
-        }
+        } catch (IOException e) {
+        	System.out.println("An error occurred.");
+			e.printStackTrace();
+		}
         return result;
     }
 
@@ -38,6 +43,7 @@ public class FileIterator implements Iterator {
         String result = "CHECK CONSOLE FOR ERRORS";
         try {
             File myObj = new File(fileName);
+            myObj.createNewFile();
             Scanner myReader = new Scanner(myObj);
             for(int i = 0; i < offset - 1; i++) myReader.nextLine();
             result = myReader.nextLine();
@@ -47,7 +53,10 @@ public class FileIterator implements Iterator {
             e.printStackTrace();
         } catch (NoSuchElementException e) {
             System.out.println("No such element in file");
-        }
+        } catch (IOException e) {
+        	System.out.println("An error occurred.");
+			e.printStackTrace();
+		}
         offset++;
         return result;
     }

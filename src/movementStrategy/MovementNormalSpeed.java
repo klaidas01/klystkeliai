@@ -6,7 +6,7 @@ import moveCommand.Left;
 import moveCommand.RemoteControl;
 import moveCommand.Right;
 import moveCommand.Up;
-import server.Game.Player;
+import server.Player;
 import server.Collision;
 
 public class MovementNormalSpeed implements IMovementStrategy {

@@ -3,7 +3,7 @@ package timing;
 import java.util.TimerTask;
 
 import movementStrategy.MovementNormalSpeed;
-import server.Game.Player;
+import server.Player;
 
 public class RevertSpeed extends TimerTask {
 	

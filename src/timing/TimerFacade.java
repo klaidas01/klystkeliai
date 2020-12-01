@@ -13,7 +13,7 @@ import enums.Constants;
 import levels.ILevel;
 import server.MessageFormer;
 import server.Game;
-import server.Game.Player;
+import server.Player;
 
 public class TimerFacade {
 	
@@ -26,6 +26,7 @@ public class TimerFacade {
 	
 	public void setupSpawnTimers(Game game)
 	{
+		this.timer = new Timer(true);
 		var foodTask = new SpawnFood(game);
 		var speedTask = new SpawnPowerup(game, new SpeedFactory());
 		var pointsTask = new SpawnPowerup(game, new PointFactory());

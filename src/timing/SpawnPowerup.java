@@ -12,7 +12,7 @@ import enums.Constants;
 import levels.ILevel;
 import server.Collision;
 import server.Game;
-import server.Game.Player;
+import server.Player;
 import server.MessageFormer;
 
 public class SpawnPowerup extends TimerTask {
