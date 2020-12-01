@@ -19,11 +19,14 @@ public class GameFrame extends JPanel implements KeyListener,ActionListener {
 	private Timer timer;
 	private PrintWriter out;
 	boolean left = false, right = false, up = false, down = false;
+	KeyPressHandler keyHandler;
 	
 	public boolean canMove = false;
-	
-	public GameFrame(PrintWriter output)
+
+	public GameFrame(PrintWriter output, boolean useProxy)
 	{
+		if (useProxy) keyHandler =  new ProxyKeyHandler();
+		else keyHandler = new RealPressHandler();
 		out = output;
 		this.setPreferredSize(new Dimension(Constants.BOARD_SIZE, Constants.BOARD_SIZE));
 		this.addKeyListener(this);
@@ -51,41 +54,12 @@ public class GameFrame extends JPanel implements KeyListener,ActionListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		int keyCode = e.getKeyCode();
-	    switch( keyCode ) { 
-	        case KeyEvent.VK_UP:
-	        	up = true;
-	            break;
-	        case KeyEvent.VK_DOWN:
-	        	down = true;
-	            break;
-	        case KeyEvent.VK_LEFT:
-	        	left = true;
-	            break;
-	        case KeyEvent.VK_RIGHT :
-	        	right = true;
-	            break;
-	     }
-		
+		keyHandler.handleKeyPress(e, this);
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		int keyCode = e.getKeyCode();
-	    switch( keyCode ) { 
-	        case KeyEvent.VK_UP:
-	        	up = false;
-	            break;
-	        case KeyEvent.VK_DOWN:
-	        	down = false;
-	            break;
-	        case KeyEvent.VK_LEFT:
-	        	left = false;
-	            break;
-	        case KeyEvent.VK_RIGHT :
-	        	right = false;
-	            break;
-	    }
+		keyHandler.handleKeyRelease(e, this);
 	}
 	
 }

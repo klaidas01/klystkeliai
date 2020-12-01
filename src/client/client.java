@@ -39,7 +39,7 @@ public class client {
         in = new Scanner(socket.getInputStream());
         out = new PrintWriter(socket.getOutputStream(), true);
 
-        boardPanel = new GameFrame(out);
+        boardPanel = new GameFrame(out, true);
         for (var i = 0; i < board.length; i++) {
             board[i] = new Square();
             boardPanel.add(board[i]);
