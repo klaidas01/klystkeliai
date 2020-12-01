@@ -1,5 +1,5 @@
 package server;
 
 public interface IObserver {
-	public void update();
+	public void update(String msg);
 }

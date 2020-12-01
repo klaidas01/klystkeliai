@@ -11,12 +11,11 @@ import looks.CornersDecorator;
 import looks.color.Blue;
 import looks.color.Red;
 import server.Coordinates;
-import server.Game;
-import server.Game.Player;
+import server.Player;
 
 public class Player2 extends Player {
-	public Player2(Game game, Socket socket) {
-		game.super(socket, game);
+	public Player2(Socket socket) throws IOException {
+		super(socket);
 	}
 
 	@Override
@@ -32,9 +31,6 @@ public class Player2 extends Player {
 
 	@Override
 	public void setupGame() throws IOException {
-		input = new Scanner(socket.getInputStream());
-        output = new PrintWriter(socket.getOutputStream(), true);
-        output.println("WELCOME P2");
         game.consoleLogger.logInfo("WELCOME P2");
         game.fileLogAdapter.logInfo("WELCOME P2");
         opponent = game.player1;

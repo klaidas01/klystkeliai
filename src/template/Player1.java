@@ -11,13 +11,12 @@ import looks.CornersDecorator;
 import looks.color.Blue;
 import looks.color.White;
 import server.Coordinates;
-import server.Game;
-import server.Game.Player;
+import server.Player;
 
 public class Player1 extends Player {
 
-	public Player1(Game game, Socket socket) {
-		game.super(socket, game);
+	public Player1(Socket socket) throws IOException {
+		super(socket);
 	}
 
 	@Override
@@ -34,18 +33,14 @@ public class Player1 extends Player {
 
 	@Override
 	public void setupGame() throws IOException {
-		input = new Scanner(socket.getInputStream());
-        output = new PrintWriter(socket.getOutputStream(), true);
-        output.println("WELCOME P1");
         game.consoleLogger.logInfo("WELCOME P1");
         game.fileLogAdapter.logInfo("WELCOME P1");
         game.player1 = this;
-        output.println("MESSAGE Waiting for opponent to connect");
     }
 
 	@Override
 	public void setPosition() {
-		northWestCoord = new Coordinates(1, 1);
-		southEastCoord = new Coordinates(4, 4);
+		northWestCoord = new Coordinates(2, 2);
+		southEastCoord = new Coordinates(5, 5);
 	}
 }

@@ -15,7 +15,7 @@ public enum Constants {
 	public static final int ROWS_VALUE = 100;
 	
 	public static final int FOOD_COUNT = 10;			//max number of food objects to be spawned
-	public static final int FOOD_DELAY = 5000;			//delay in ms between food object spawns
+	public static final int FOOD_DELAY = 1000;			//delay in ms between food object spawns
 	
 	public static final int POWERUP_COUNT = 5;			//max number of power up objects to be spawned
 	public static final int POWERUP_DELAY = 5000;		//delay in ms between power up object spawns

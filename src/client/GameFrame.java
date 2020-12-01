@@ -20,6 +20,8 @@ public class GameFrame extends JPanel implements KeyListener,ActionListener {
 	private PrintWriter out;
 	boolean left = false, right = false, up = false, down = false;
 	
+	public boolean canMove = false;
+	
 	public GameFrame(PrintWriter output)
 	{
 		out = output;
@@ -34,6 +36,9 @@ public class GameFrame extends JPanel implements KeyListener,ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		if (!canMove) {
+			left = false; right = false; up = false; down = false;
+		}
 		if (left) out.println('L');
 		else if (right) out.println('R');
 		else if (up) out.println('U');

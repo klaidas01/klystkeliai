@@ -1,6 +1,6 @@
 package looks;
 
-import server.Game.Player;
+import server.Player;
 import server.MessageFormer;
 
 public class BaseLooks implements ILooks {

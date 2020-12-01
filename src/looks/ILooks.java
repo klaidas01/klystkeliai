@@ -1,7 +1,7 @@
 package looks;
 
 import server.MessageFormer;
-import server.Game.Player;
+import server.Player;
 
 public interface ILooks {
 	void draw();

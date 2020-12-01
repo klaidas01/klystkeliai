@@ -31,6 +31,7 @@ public class client {
     private Socket socket;
     private Scanner in;
     private PrintWriter out;
+    GameFrame boardPanel;
     
     public client(String serverAddress) throws Exception {
 
@@ -38,7 +39,7 @@ public class client {
         in = new Scanner(socket.getInputStream());
         out = new PrintWriter(socket.getOutputStream(), true);
 
-        var boardPanel = new GameFrame(out);
+        boardPanel = new GameFrame(out);
         for (var i = 0; i < board.length; i++) {
             board[i] = new Square();
             boardPanel.add(board[i]);
@@ -93,7 +94,7 @@ public class client {
     public void play() throws Exception {
         try {
             var response = in.nextLine();
-            var mark = response.charAt(8);
+            var mark = response.substring(8);
             frame.setTitle("Player " + mark);
             while (in.hasNextLine()) {
             	frame.repaint();
@@ -105,12 +106,26 @@ public class client {
                 	scoreboard[0].setText("Your score: " + scoreStrings[0]);
                 	scoreboard[2].setText("Opponents score: " + scoreStrings[1]);
                 }
-                if (response.startsWith("TIME"))
+                else if (response.startsWith("WAITING"))
+                {
+                	scoreboard[1].setText("Waiting for other player..");
+                	boardPanel.canMove = false;
+                	out.println("WAITING");
+                }
+                else if (response.startsWith("PLAY"))
+                {
+                	boardPanel.canMove = true;
+                }
+                else if (response.startsWith("TIME"))
                 {
                 	int seconds = Integer.parseInt(response.substring(5));
                 	scoreboard[1].setText("Time left: " + (int)(Math.floor(seconds / 60)) + ":" + String.format("%02d", seconds % 60));
                 }
-                if (response.startsWith("POS")) {
+                else if (response.startsWith("LEVEL_SELECT"))
+                {
+                	new LevelSelect(out);
+                }
+                else if (response.startsWith("POS")) {
                 	var map = response.substring(4).toCharArray();
                 	for (int i = 0; i < map.length; i++)
                 	{
