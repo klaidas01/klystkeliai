@@ -1,5 +1,7 @@
 package boardObjects;
 
+import visitor.Visitor;
+
 public class NegativeBoardObject extends BoardObject {
 
 	private NegativeObject negativeObj;
@@ -12,6 +14,11 @@ public class NegativeBoardObject extends BoardObject {
 	@Override
 	public String getName() {
 		return negativeObj.getName();
+	}
+
+	@Override
+	public void accept(Visitor<StringBuilder> v) {
+		v.visit(this);
 	}
 	
 }

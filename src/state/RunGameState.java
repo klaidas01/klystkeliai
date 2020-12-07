@@ -17,6 +17,7 @@ public class RunGameState implements State {
 
 	@Override
 	public void Handle(GameContext context) throws IOException {
+		System.out.println("Running game");
 		context.game.attach(context);
 		player1.setGame(context.game);
 		player2.setGame(context.game);

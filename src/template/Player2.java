@@ -12,6 +12,7 @@ import looks.color.Blue;
 import looks.color.Red;
 import server.Coordinates;
 import server.Player;
+import visitor.Visitor;
 
 public class Player2 extends Player {
 	public Player2(Socket socket) throws IOException {
@@ -49,6 +50,11 @@ public class Player2 extends Player {
 	public void setPosition() {
 		northWestCoord = new Coordinates(40, 40);
 		southEastCoord = new Coordinates(43, 43);
+	}
+
+	@Override
+	public void accept(Visitor<StringBuilder> v) {
+		v.visit(this);
 	}
 
 }

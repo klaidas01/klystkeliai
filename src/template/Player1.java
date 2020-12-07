@@ -12,6 +12,7 @@ import looks.color.Blue;
 import looks.color.White;
 import server.Coordinates;
 import server.Player;
+import visitor.Visitor;
 
 public class Player1 extends Player {
 
@@ -42,5 +43,10 @@ public class Player1 extends Player {
 	public void setPosition() {
 		northWestCoord = new Coordinates(2, 2);
 		southEastCoord = new Coordinates(5, 5);
+	}
+
+	@Override
+	public void accept(Visitor<StringBuilder> v) {
+		v.visit(this);
 	}
 }
