@@ -6,6 +6,7 @@ import java.util.List;
 import boardObjects.BoardObject;
 import server.Collision;
 import server.MessageFormer;
+import visitor.Visitor;
 
 public class BoardObjectComposite extends BoardObject {
 	private List<BoardObject> children = new ArrayList<BoardObject>(); 
@@ -41,5 +42,13 @@ public class BoardObjectComposite extends BoardObject {
 	@Override
 	public String getName() {
 		return "COMPOSITE";
+	}
+
+	@Override
+	public void accept(Visitor<StringBuilder> v) {
+		for (BoardObject obj : children)
+		{
+			obj.accept(v);
+		}
 	} 
 }

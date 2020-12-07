@@ -27,8 +27,9 @@ public class LevelSelectState implements State {
 			var input = new Scanner(player1.socket.getInputStream());
 			levelName = input.next();
 			System.out.println("Level received: " + levelName);
-			if (levelName.contains("BOX") || levelName.contains("IBOX") || levelName.contains("CROSS"))
+			if (levelName.contains("BOX") || levelName.contains("IBOX") || levelName.contains("CROSS")) {
 				break;
+			}
 		}
 		context.game.setLevel(levelName);
 		context.setState(new RunGameState(player1, player2));

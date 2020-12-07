@@ -2,6 +2,7 @@ package boardObjects;
 import server.Collision;
 import server.Coordinates;
 import server.MessageFormer;
+import visitor.Visitor;
 
 public abstract class BoardObject {
 	public Coordinates northWestCoord;
@@ -16,6 +17,8 @@ public abstract class BoardObject {
 	public BoardObject() {}
 	
 	public abstract String getName();
+	
+	public abstract void accept(Visitor<StringBuilder> v);
 	
 	public void draw(MessageFormer former) {
 		former.AddObject(this);
