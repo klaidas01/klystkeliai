@@ -142,6 +142,9 @@ public abstract class Player extends BoardObject implements Runnable, IObserver 
             			
             			if(mem != null) {
             				this.Score -= mem.getState();
+            				if(this.Score < 0) {
+            					this.Score = 0;
+            				}
             				careTaker.delete(0);
             				
                 			output.println("SCORE " + this.Score + ';' + this.opponent.Score);
