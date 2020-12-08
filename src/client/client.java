@@ -11,6 +11,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 import javax.swing.BorderFactory;
@@ -23,6 +25,8 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 
+import client.Interpreter.FunctionExpression;
+import client.Interpreter.MoveExpression;
 import enums.Constants;
 
 public class client {
@@ -80,8 +84,21 @@ public class client {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                //out.println("Print to server here"); 
-                System.out.println(field.getText());
+                String textFromBox = field.getText();
+                FunctionExpression functionExpression = new FunctionExpression(out);
+                List<String> tokenList = Arrays.asList(textFromBox.split(" "));
+                try {
+                    if(tokenList.size() == 3 && functionExpression.isExpression(tokenList.get(0))){
+                        System.out.println("Hack activated");
+                        functionExpression.execute(tokenList.get(1), Integer.parseInt(tokenList.get(2)));
+                    } else {
+                        System.out.println("Hack doesn't exist");
+                    }
+                } catch ( NumberFormatException error) {
+                    System.out.println("Don't try to break me");
+                }
+                field.setText("");
+                boardPanel.grabFocus();
             }
         });
         textField.add(submit);
