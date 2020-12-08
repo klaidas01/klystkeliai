@@ -32,6 +32,10 @@ public class Player2 extends Player {
 
 	@Override
 	public void setupGame() throws IOException {
+		input = new Scanner(socket.getInputStream());
+        output = new PrintWriter(socket.getOutputStream(), true);
+        output.println("WELCOME P2");
+		game.logHandler.LogInfo("message", "loginfo.txt");
         game.consoleLogger.logInfo("WELCOME P2");
         game.fileLogAdapter.logInfo("WELCOME P2");
         opponent = game.player1;

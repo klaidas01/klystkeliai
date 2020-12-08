@@ -10,9 +10,7 @@ import boardObjects.Food;
 import composite.BoardObjectComposite;
 import enums.Constants;
 import levels.ILevel;
-import logging.ConsoleLogAdapter;
-import logging.FileIterator;
-import logging.FileLogAdapter;
+import logging.*;
 import looks.ILooks;
 import looks.BaseLooks;
 import levels.LevelBuilder;
@@ -26,6 +24,9 @@ import java.io.IOException;
 
 public class Game extends Observable {
     public Player player1;
+    public LogHandler fileLogger = new FileLog();
+    public LogHandler logHandler;
+    public LogHandler consoleLogger2 = new ConsoleLogger();
     public ConsoleLogAdapter consoleLogger = new ConsoleLogAdapter();
     public FileLogAdapter fileLogAdapter = new FileLogAdapter();
     public BoardObjectComposite objectComposite = new BoardObjectComposite();
@@ -37,8 +38,14 @@ public class Game extends Observable {
     public int foodCount = 0;
     public TimerFacade timer;
     public volatile boolean shutdown = false;
-    
+
     public Game () throws FileNotFoundException {
+//    	currentLevel = LevelBuilder.createBoxLevel();
+//    	currentLevel = LevelBuilder.createInvisibleBoxLevel();
+    	currentLevel = LevelBuilder.createBibleLevel();
+    	consoleLogger2.setNextChain(fileLogger);
+    	fileLogger.setNextChain(null);
+    	logHandler=consoleLogger2;
     	rand = new Random();
     	timer = new TimerFacade();
     	this.obs = new ArrayList<>();
@@ -60,7 +67,7 @@ public class Game extends Observable {
     	}
     	former = new MessageFormer(Constants.ROWS_VALUE, currentLevel.levelString());
     }
-    
+
     public void startTimer() {
     	this.gameTimer = new GameTimer(this);
     	gameTimer.start();
