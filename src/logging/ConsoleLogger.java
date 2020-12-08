@@ -1,12 +1,28 @@
 package logging;
 
 
-public class ConsoleLogger {
+import java.io.IOException;
+
+public class ConsoleLogger extends LogHandler{
 
     private static ConsoleLogger instance = null;
 
-    private ConsoleLogger() {
+    public ConsoleLogger() {
         System.out.println("ConsoleLog Singleton initialized");
+    }
+
+    @Override
+    public void LogInfo(String message, String fileName) throws IOException {
+        if(fileName.isEmpty()) {
+            logInfo(message);
+        }else{
+            next.LogInfo(message, fileName);
+        }
+    }
+
+    @Override
+    public void setNextChain(LogHandler next) {
+        this.next = next;
     }
 
     public static synchronized ConsoleLogger getInstance() {
