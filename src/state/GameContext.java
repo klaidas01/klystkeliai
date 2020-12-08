@@ -10,8 +10,10 @@ public class GameContext implements IObserver {
 	private State state;
 	public Game game;
 	public ExecutorService pool;
-	
-	public GameContext(ExecutorService es, Game g) {
+	public InterfaceMediator gameMediator;
+
+	public GameContext(ExecutorService es, Game g, InterfaceMediator mediator) {
+		gameMediator=mediator;
 		pool = es;
 		game = g;
 	}
@@ -26,21 +28,6 @@ public class GameContext implements IObserver {
 
 	@Override
 	public void update(String msg) {
-		if (msg == "GAME OVER") {
-			try {
-				state = new GameOverState();
-				execute();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		else if (msg == game.player1.name) {
-			try {
-				state = new InitNewGameState();
-				execute();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
+		gameMediator.notify(this, msg, game);
 	}
 }
