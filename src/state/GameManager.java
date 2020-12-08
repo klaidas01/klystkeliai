@@ -23,9 +23,10 @@ public class GameManager {
     			p2.output.println("WELCOME P2");
     			p2.output.println("WAITING");
     			Game game = new Game();
-    			GameContext context = new GameContext(pool, game);
-    			context.setState(new LevelSelectState(p1, p2));
-    			context.execute();
+    			GameContextMediator mediator = new GameContextMediator();
+    			GameContext context = new GameContext(pool, game, mediator);
+    			mediator.setState(new LevelSelectState(p1,p2));
+				mediator.execute(context);
             }
 		}
 	}
