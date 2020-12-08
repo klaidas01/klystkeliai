@@ -27,7 +27,7 @@ public class SpawnPoison extends TimerTask {
     				|| game.objectComposite.doesCollide(newPoison) != null))
     		{
     			game.objectComposite.add(newPoison);
-    			game.foodCount++;
+    			game.poisonCount++;
     		}
     		game.former.newMessage();
     		game.objectComposite.draw(game.former);
