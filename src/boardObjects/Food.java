@@ -1,5 +1,7 @@
 package boardObjects;
 
+import visitor.Visitor;
+
 public class Food extends BoardObject {
 	
 	public int Value;
@@ -12,6 +14,11 @@ public class Food extends BoardObject {
 	@Override
 	public String getName() {
 		return "FOOD";
+	}
+
+	@Override
+	public void accept(Visitor<StringBuilder> v) {
+		v.visit(this);
 	}
 
 }

@@ -14,8 +14,8 @@ public abstract class Observable {
 		obs.remove(observer);
 	}
 	
-	public void notifyObs() {
-		obs.forEach(observer -> observer.update());
+	public void notifyObs(String msg) {
+		obs.forEach(observer -> observer.update(msg));
 	}
 	
 }

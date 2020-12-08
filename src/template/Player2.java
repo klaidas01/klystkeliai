@@ -11,12 +11,12 @@ import looks.CornersDecorator;
 import looks.color.Blue;
 import looks.color.Red;
 import server.Coordinates;
-import server.Game;
-import server.Game.Player;
+import server.Player;
+import visitor.Visitor;
 
 public class Player2 extends Player {
-	public Player2(Game game, Socket socket) {
-		game.super(socket, game);
+	public Player2(Socket socket) throws IOException {
+		super(socket);
 	}
 
 	@Override
@@ -54,6 +54,11 @@ public class Player2 extends Player {
 	public void setPosition() {
 		northWestCoord = new Coordinates(40, 40);
 		southEastCoord = new Coordinates(43, 43);
+	}
+
+	@Override
+	public void accept(Visitor<StringBuilder> v) {
+		v.visit(this);
 	}
 
 }

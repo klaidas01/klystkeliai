@@ -1,5 +1,7 @@
 package boardObjects;
 
+import visitor.Visitor;
+
 public class HalfSpeed extends NegativePowerUp {
 	public HalfSpeed(int x1, int y1, int x2, int y2)
 	{
@@ -8,5 +10,10 @@ public class HalfSpeed extends NegativePowerUp {
 	
 	public String getName() {
 		return "HALF_SPEED";
+	}
+
+	@Override
+	public void accept(Visitor<StringBuilder> v) {
+		v.visit(this);
 	}
 }
