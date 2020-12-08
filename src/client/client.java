@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -14,9 +15,11 @@ import java.util.Scanner;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 
@@ -69,9 +72,23 @@ public class client {
         }
         
         JPanel mainPanel = new JPanel();
+        TextField textField = new TextField();
+        JTextField field = new JTextField(60);
+        textField.add(field);
+        JButton submit = new JButton("Submit");
+        submit.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //out.println("Print to server here"); 
+                System.out.println(field.getText());
+            }
+        });
+        textField.add(submit);
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
         mainPanel.add(boardPanel);
         mainPanel.add(scorePanel);
+        mainPanel.add(textField);
         frame.getContentPane().add(mainPanel, BorderLayout.CENTER);
     }
     
