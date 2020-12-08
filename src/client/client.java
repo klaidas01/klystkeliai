@@ -25,8 +25,10 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 
+import client.Interpreter.ExpressionHandler;
 import client.Interpreter.FunctionExpression;
 import client.Interpreter.MoveExpression;
+import client.Interpreter.NumberExpression;
 import enums.Constants;
 
 public class client {
@@ -85,18 +87,8 @@ public class client {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String textFromBox = field.getText();
-                FunctionExpression functionExpression = new FunctionExpression(out);
-                List<String> tokenList = Arrays.asList(textFromBox.split(" "));
-                try {
-                    if(tokenList.size() == 3 && functionExpression.isExpression(tokenList.get(0))){
-                        System.out.println("Hack activated");
-                        functionExpression.execute(tokenList.get(1), Integer.parseInt(tokenList.get(2)));
-                    } else {
-                        System.out.println("Hack doesn't exist");
-                    }
-                } catch ( NumberFormatException error) {
-                    System.out.println("Don't try to break me");
-                }
+                ExpressionHandler expressionHandler = new ExpressionHandler(out);
+                expressionHandler.exec(textFromBox);
                 field.setText("");
                 boardPanel.grabFocus();
             }
