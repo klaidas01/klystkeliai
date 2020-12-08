@@ -29,10 +29,10 @@ public class ProxyKeyHandler implements KeyPressHandler {
       case KeyEvent.VK_DOWN:
       case KeyEvent.VK_LEFT:
       case KeyEvent.VK_RIGHT:
-        System.out.println("Handling press old school way");
+//        System.out.println("Handling press old school way");
         realPressHandler.handleKeyPress(e, frame);
-      default:
-        System.out.println("Chill down, we don't support this yet");
+//      default:
+//        System.out.println("Chill down, we don't support this yet");
     }
   }
 

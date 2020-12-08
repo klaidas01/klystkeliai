@@ -11,6 +11,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 import javax.swing.BorderFactory;
@@ -23,6 +25,10 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 
+import client.Interpreter.ExpressionHandler;
+import client.Interpreter.FunctionExpression;
+import client.Interpreter.MoveExpression;
+import client.Interpreter.NumberExpression;
 import enums.Constants;
 
 public class client {
@@ -80,8 +86,11 @@ public class client {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                //out.println("Print to server here"); 
-                System.out.println(field.getText());
+                String textFromBox = field.getText();
+                ExpressionHandler expressionHandler = new ExpressionHandler(out);
+                expressionHandler.exec(textFromBox);
+                field.setText("");
+                boardPanel.grabFocus();
             }
         });
         textField.add(submit);
