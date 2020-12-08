@@ -26,21 +26,17 @@ public class GameContext implements IObserver {
 
 	@Override
 	public void update(String msg) {
-		var p1 = game.player1;
-		var p2 = game.player1.opponent;
 		if (msg == "GAME OVER") {
-			game.shutdown = true;
-			p1.output.println("WAITING");
-			p2.output.println("WAITING");
-			System.out.println(game.shutdown);
-			System.out.println(p1.game.shutdown);
-			System.out.println(p2.game.shutdown);
-			game.timer.timer.cancel();
-		}
-		else if (msg == p1.name) {
 			try {
-				game = new Game();
-				state = new LevelSelectState(p1, p2);
+				state = new GameOverState();
+				execute();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		else if (msg == game.player1.name) {
+			try {
+				state = new InitNewGameState();
 				execute();
 			} catch (Exception e) {
 				e.printStackTrace();
