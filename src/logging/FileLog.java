@@ -6,9 +6,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
-public class FileLog {
+public class FileLog extends LogHandler {
     private static FileLog instance = null;
-    private FileLog() {
+    public FileLog() {
+        super();
         System.out.println("FileLog Singleton initialized");
     }
 
@@ -22,16 +23,18 @@ public class FileLog {
     }
 
     public void LogInfo(String message, String fileName) throws IOException {
-        File yourFile = new File(fileName);
-        yourFile.createNewFile();
-        try {
-            FileWriter myWriter = new FileWriter(fileName,true);
-            myWriter.write(message);
-            myWriter.write("\n");
-            myWriter.close();
-        } catch (IOException e) {
-            System.out.println("An error occurred when logging to file\n");
-            e.printStackTrace();
+        if(!fileName.equals(" ")) {
+            File yourFile = new File(fileName);
+            yourFile.createNewFile();
+            try {
+                FileWriter myWriter = new FileWriter(fileName, true);
+                myWriter.write(message);
+                myWriter.write("\n");
+                myWriter.close();
+            } catch (IOException e) {
+                System.out.println("An error occurred when logging to file\n");
+                e.printStackTrace();
+            }
         }
     }
 
@@ -50,5 +53,11 @@ public class FileLog {
             e.printStackTrace();
         }
         return info.iterator();
+    }
+
+
+    @Override
+    public void setNextChain(LogHandler next) {
+        this.next = next;
     }
 }
