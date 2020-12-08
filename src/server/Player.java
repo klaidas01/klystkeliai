@@ -5,6 +5,8 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 
+import Memento.CareTaker;
+import Memento.Memento;
 import boardObjects.BoardObject;
 import boardObjects.Food;
 import looks.ILooks;
@@ -26,6 +28,8 @@ public abstract class Player extends BoardObject implements Runnable, IObserver 
         public ILooks looks;
         public String name;
         public Game game;
+        private double lastCollected = 0;
+        private CareTaker careTaker = new CareTaker();
         
         public Player(Socket socket) throws IOException {
         	super();
@@ -48,6 +52,14 @@ public abstract class Player extends BoardObject implements Runnable, IObserver 
     		this.looks.draw();
     		
     	}
+        
+        public Memento saveStateToMemento() {
+        	return new Memento(lastCollected);
+        }
+        
+        public void getStateFromMemento(Memento memento) {
+        	lastCollected = memento.getState();
+        }
         
         public abstract void setLooks();
         
@@ -111,12 +123,30 @@ public abstract class Player extends BoardObject implements Runnable, IObserver 
             			game.foodCount--;
             			this.Score += ((Food)collectedObject).Value * this.scoreMultiplier;
             			
-            			if(this.Score >= 5) {
+            			this.lastCollected = ((Food)collectedObject).Value * this.scoreMultiplier;
+            			
+            			careTaker.add(saveStateToMemento());
+            			
+            			if(this.Score >= 10) {
             				game.notifyObs("GAME OVER");
                 		}
             			
             			output.println("SCORE " + this.Score + ';' + this.opponent.Score);
                 		opponent.output.println("SCORE " + this.opponent.Score + ';' + this.Score);
+            		}
+            		else if (collectedObject.getName() == "POISON")
+            		{
+            			game.poisonCount--;
+            			
+            			Memento mem = careTaker.get(0);
+            			
+            			if(mem != null) {
+            				this.Score -= mem.getState();
+            				careTaker.delete(0);
+            				
+                			output.println("SCORE " + this.Score + ';' + this.opponent.Score);
+                    		opponent.output.println("SCORE " + this.opponent.Score + ';' + this.Score);
+            			}
             		}
             		else {
             			game.powerupCount--;

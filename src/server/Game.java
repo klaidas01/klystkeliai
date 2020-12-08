@@ -36,6 +36,7 @@ public class Game extends Observable {
     GameTimer gameTimer;
     public int powerupCount = 0;
     public int foodCount = 0;
+    public int poisonCount = 0;
     public TimerFacade timer;
     public volatile boolean shutdown = false;
 

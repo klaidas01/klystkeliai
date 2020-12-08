@@ -171,6 +171,9 @@ public class client {
 	                		case 'B':
 	                			board[i].setBackground(Color.blue);
 	                			break;
+	                		case 'm':
+	                			board[i].setBackground(Color.red);
+	                			break;	
 	                		default:
 	                			board[i].setBackground(Color.white);
                 		}

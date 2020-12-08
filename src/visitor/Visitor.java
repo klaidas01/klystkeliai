@@ -5,6 +5,7 @@ import boardObjects.DoublePoints;
 import boardObjects.DoubleSpeed;
 import boardObjects.Food;
 import boardObjects.HalfSpeed;
+import boardObjects.MementoMoriPoison;
 import boardObjects.NegativeBoardObject;
 import boardObjects.ZeroPoints;
 import template.Player1;
@@ -19,6 +20,7 @@ public interface Visitor<T> {
 	void visit(DoublePoints dp);
 	void visit(ZeroPoints zp);
 	void visit(NegativeBoardObject w);
+	void visit(MementoMoriPoison mem);
 	
 	T returnResult();
 }

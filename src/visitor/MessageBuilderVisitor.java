@@ -4,6 +4,7 @@ import boardObjects.DoublePoints;
 import boardObjects.DoubleSpeed;
 import boardObjects.Food;
 import boardObjects.HalfSpeed;
+import boardObjects.MementoMoriPoison;
 import boardObjects.NegativeBoardObject;
 import boardObjects.ZeroPoints;
 import template.Player1;
@@ -105,6 +106,16 @@ public class MessageBuilderVisitor implements Visitor<StringBuilder> {
 		        			message.setCharAt(j + i * size, 'w');
 		            }
 		}
+	}
+
+	@Override
+	public void visit(MementoMoriPoison mem) {
+		for (int i = mem.northWestCoord.Y; i <= mem.southEastCoord.Y; i++)
+	        for (int j = mem.northWestCoord.X; j <= mem.southEastCoord.X; j++)
+	            {
+	        		if (message.charAt(j + i * size) != 'w')
+	        			message.setCharAt(j + i * size, 'm');
+	            }
 	}
 
 }

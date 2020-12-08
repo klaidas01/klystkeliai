@@ -30,9 +30,11 @@ public class TimerFacade {
 		var foodTask = new SpawnFood(game);
 		var speedTask = new SpawnPowerup(game, new SpeedFactory());
 		var pointsTask = new SpawnPowerup(game, new PointFactory());
+		var poisonTask = new SpawnPoison(game);
 		timer.schedule(foodTask, 0, Constants.FOOD_DELAY);
         timer.schedule(speedTask, 0, Constants.POWERUP_DELAY);
         timer.schedule(pointsTask, 0, Constants.POWERUP_DELAY);
+        timer.schedule(poisonTask, 0, Constants.FOOD_DELAY);
 	}
 	
 	public void CollectedPowerUp(Player player, String powerUpType)
